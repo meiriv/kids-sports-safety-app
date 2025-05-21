@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Quick start:
+    1. git clone https://github.com/meiriv/kids-sports-safety-app.git
+    2. npm install
+    3. npm run build
+    4. npm start
 ## Available Scripts
 
 In the project directory, you can run:
