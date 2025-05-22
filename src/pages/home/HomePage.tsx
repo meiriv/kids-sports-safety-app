@@ -133,6 +133,45 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
   );
 };
 
+interface Friend {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+  weeklyScore: number;
+}
+
+const mockFriends: Friend[] = [
+  { id: '1', name: 'Alex', avatarUrl: '', weeklyScore: 410 },
+  { id: '2', name: 'Jamie', avatarUrl: '', weeklyScore: 350 },
+  { id: '3', name: 'Taylor', avatarUrl: '', weeklyScore: 290 },
+];
+
+const FriendsLeaderboard: React.FC<{ friends: Friend[] }> = ({ friends }) => (
+  <Paper elevation={2} sx={{ p: 2, borderRadius: 3, mb: 4 }}>
+    <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+      Friends Leaderboard
+    </Typography>
+    <Grid container spacing={2}>
+      {friends.map(friend => (
+        <Grid item xs={12} sm={4} key={friend.id}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Avatar src={friend.avatarUrl}>
+              {friend.name[0]}
+            </Avatar>
+            <Box>
+              <Typography variant="subtitle1" fontWeight="bold">{friend.name}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Weekly Score: <b>{friend.weeklyScore}</b>
+              </Typography>
+            </Box>
+          </Box>
+        </Grid>
+      ))}
+    </Grid>
+  </Paper>
+);
+
+
 const HomePage: React.FC = () => {
   const { currentUser, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
@@ -252,7 +291,8 @@ const HomePage: React.FC = () => {
         {/* Stats row */}
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 2, textAlign: isRTL ? 'right' : 'left' }}>
         {t('home.stats')}
-      </Typography><Grid container spacing={3} sx={{ mb: 4 }}>
+      </Typography>
+      <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={6} sm={3}>
           <StatCard
             title="Weekly Score"
@@ -260,7 +300,8 @@ const HomePage: React.FC = () => {
             icon="🏆"
             color="#FFD700"
           />
-        </Grid>        <Grid item xs={6} sm={3}>
+        </Grid>       
+         <Grid item xs={6} sm={3}>
           <StatCard
             title="Active Days"
             value="5"
@@ -283,7 +324,10 @@ const HomePage: React.FC = () => {
             icon="⭐"
             color="#FF9800"
           />
-        </Grid>      </Grid>
+        </Grid>      
+      </Grid>
+       {/* Friends leaderboard */}
+      <FriendsLeaderboard friends={mockFriends} />
         {/* Quick Actions */}
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 2, textAlign: isRTL ? 'right' : 'left' }}>
         {isRTL ? 'פעולות מהירות' : 'Quick Actions'}
