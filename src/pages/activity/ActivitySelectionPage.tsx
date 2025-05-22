@@ -12,6 +12,8 @@ import {
   CardMedia
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Available activity types with improved descriptions and kid-friendly details
 const activityTypes = [  {    id: 'freestyle',
@@ -43,16 +45,17 @@ const activityTypes = [  {    id: 'freestyle',
 
 const ActivitySelectionPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
-      <Button
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>      <Button
         variant="outlined"
         onClick={() => navigate('/')}
         sx={{ mb: 3 }}
       >
-        Back to Home
-      </Button>      <Paper 
+        {t('buttons.back')}
+      </Button><Paper 
         elevation={3} 
         sx={{ 
           p: 3, 

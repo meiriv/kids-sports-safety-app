@@ -22,47 +22,85 @@ import EmergencyAlert from '../../components/emergency/EmergencyAlert';
 import MotionFeedback from '../../components/motion-tracking/MotionFeedback';
 import { useGamification } from '../../context/GamificationContext';
 import { useMotion } from '../../context/MotionContext';
+import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { useLanguage } from '../../context/LanguageContext';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import TimerIcon from '@mui/icons-material/Timer';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 
-// Predefined activities
-const activityTypes = [  {    id: 'freestyle',
-    name: 'Freestyle Play',
-    description: 'Free movement play - run, jump, and have fun!',
+interface Activity {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  instructions: string[];
+}
+
+// We'll use translations for activity types
+const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
+  {
+    id: 'freestyle',
+    name: t('activities.freestyle.title'),
+    description: t('activities.freestyle.description'),
     imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,
-    instructions: [
-      'Move around freely in front of the camera',
-      'Try different movements to earn points',
-      'Have fun and be active!'
-    ]
-  },{    id: 'dance',
-    name: 'Dance',
-    description: 'Show off your best dance moves!',
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
-    instructions: [
-      'Dance to your favorite music',
-      'Try to use your whole body',
-      'Keep the rhythm and have fun!'
-    ]
+    instructions: isRTL 
+      ? [
+          'נוע בחופשיות מול המצלמה',
+          'נסה תנועות שונות כדי לצבור נקודות',
+          'תהנה ותהיה פעיל!'
+        ] 
+      : [
+          'Move around freely in front of the camera',
+          'Try different movements to earn points',
+          'Have fun and be active!'
+        ]
   },
-  {    id: 'sports',
-    name: 'Sports Practice',
-    description: 'Practice your sports skills',
+  {
+    id: 'dance',
+    name: t('activities.dance.title'),
+    description: t('activities.dance.description'),
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
+    instructions: isRTL 
+      ? [
+          'רקדו למוזיקה האהובה עליכם',
+          'השתמשו בכל הגוף',
+          'שמרו על הקצב ותהנו!'
+        ] 
+      : [
+          'Dance to your favorite music',
+          'Try to use your whole body',
+          'Keep the rhythm and have fun!'
+        ]
+  },
+  {
+    id: 'sports',
+    name: t('activities.sports.title'),
+    description: t('activities.sports.description'),
     imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,
-    instructions: [
-      'Choose your favorite sport movement',
-      'Practice the movement in front of the camera',
-      'Get feedback on your form'
-    ]
+    instructions: isRTL 
+      ? [
+          'בחרו את תנועת הספורט האהובה עליכם',
+          'תרגלו את התנועה מול המצלמה',
+          'קבלו משוב על הצורה שלכם'
+        ] 
+      : [
+          'Choose your favorite sport movement',
+          'Practice the movement in front of the camera',
+          'Get feedback on your form'
+        ]
   }
 ];
 
 const ActivityPage: React.FC = () => {
   const { activityId } = useParams<{ activityId: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+  const activityTypes = getActivityTypes(t, isRTL);
+  
   const [activity, setActivity] = useState(activityTypes[0]);
   const [activeStep, setActiveStep] = useState(0);
   const [timer, setTimer] = useState(0);
@@ -86,7 +124,7 @@ const ActivityPage: React.FC = () => {
         setActivity(foundActivity);
       }
     }
-  }, [activityId]);
+  }, [activityId, t, isRTL]);
 
   // Handle timer for activity session
   useEffect(() => {
@@ -172,11 +210,10 @@ const ActivityPage: React.FC = () => {
         <Grid item xs={12} md={8}>
           <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
             <Camera width={640} height={480} />
-            
-            {/* Activity controls */}
-            <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <TimerIcon sx={{ mr: 1, color: 'text.secondary' }} />
+              {/* Activity controls */}
+            <Box sx={{ p: 2, display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center' }}>
+                <TimerIcon sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0, color: 'text.secondary' }} />
                 <Typography variant="h5" fontWeight="bold">
                   {formatTime(timer)}
                 </Typography>
@@ -187,42 +224,43 @@ const ActivityPage: React.FC = () => {
                   variant="contained"
                   color="primary"
                   size="large"
-                  startIcon={<PlayArrowIcon />}
+                  startIcon={!isRTL && <PlayArrowIcon />}
+                  endIcon={isRTL && <PlayArrowIcon />}
                   onClick={handleStartActivity}
                   disabled={isCompleted}
                   sx={{ borderRadius: 4, px: 4 }}
                 >
-                  Start Recording
+                  {t('activities.start')}
                 </Button>
               ) : (
                 <Button
                   variant="contained"
                   color="error"
                   size="large"
-                  startIcon={<StopIcon />}
+                  startIcon={!isRTL && <StopIcon />}
+                  endIcon={isRTL && <StopIcon />}
                   onClick={handleStopActivity}
                   sx={{ borderRadius: 4, px: 4 }}
                 >
-                  Stop Recording
+                  {t('activities.stop')}
                 </Button>
               )}
             </Box>
           </Paper>
-          
-          {/* Form analysis feedback */}
+            {/* Form analysis feedback */}
           {isSessionActive && (
             <Box sx={{ mt: 2 }}>
               <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  Activity Feedback
+                <Typography variant="h6" gutterBottom align={isRTL ? 'right' : 'left'}>
+                  {isRTL ? 'משוב פעילות' : 'Activity Feedback'}
                 </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography variant="body1">
-                    Keep moving to earn more points!
+                <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="body1" align={isRTL ? 'right' : 'left'}>
+                    {isRTL ? 'המשך לזוז כדי להרוויח יותר נקודות!' : 'Keep moving to earn more points!'}
                   </Typography>
                   {currentSession && (
                     <Typography variant="h6" color="primary" fontWeight="bold">
-                      {currentSession.points} points
+                      {isRTL ? `${currentSession.points} נקודות` : `${currentSession.points} points`}
                     </Typography>
                   )}
                 </Box>
@@ -230,8 +268,8 @@ const ActivityPage: React.FC = () => {
                 {/* Show feedback from motion tracking */}
                 {isTracking && (
                   <Box sx={{ mt: 2, p: 2, bgcolor: 'success.light', color: 'white', borderRadius: 1 }}>
-                    <Typography variant="body1">
-                      Great job! We're detecting your movements.
+                    <Typography variant="body1" align={isRTL ? 'right' : 'left'}>
+                      {isRTL ? 'עבודה מצוינת! אנחנו מזהים את התנועות שלך.' : 'Great job! We\'re detecting your movements.'}
                     </Typography>
                   </Box>
                 )}
@@ -245,16 +283,14 @@ const ActivityPage: React.FC = () => {
               <MotionFeedback activityType={activity.id} />
             </Box>
           )}
-        </Grid>
-
-        {/* Instructions section */}
+        </Grid>        {/* Instructions section */}
         <Grid item xs={12} md={4}>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3 }}>
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
-              Instructions
+            <Typography variant="h5" fontWeight="bold" gutterBottom align={isRTL ? 'right' : 'left'}>
+              {isRTL ? 'הוראות' : 'Instructions'}
             </Typography>
             
-            <Typography variant="body1" paragraph>
+            <Typography variant="body1" paragraph align={isRTL ? 'right' : 'left'}>
               {activity.description}
             </Typography>
             
@@ -267,30 +303,33 @@ const ActivityPage: React.FC = () => {
                 alt={activity.name}
               />
             </Card>
-            
-            {/* Step-by-step instructions */}
+              {/* Step-by-step instructions */}
             <Stepper activeStep={activeStep} orientation="vertical" sx={{ mb: 3 }}>
               {activity.instructions.map((instruction, index) => (
                 <Step key={index}>
                   <StepLabel>
-                    <Typography variant="subtitle1">Step {index + 1}</Typography>
+                    <Typography variant="subtitle1" align={isRTL ? 'right' : 'left'}>
+                      {isRTL ? `שלב ${index + 1}` : `Step ${index + 1}`}
+                    </Typography>
                   </StepLabel>
                   <StepContent>
-                    <Typography variant="body1">{instruction}</Typography>
-                    <Box sx={{ mb: 2, mt: 2 }}>
+                    <Typography variant="body1" align={isRTL ? 'right' : 'left'}>
+                      {instruction}
+                    </Typography>
+                    <Box sx={{ mb: 2, mt: 2, display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
                       <Button
                         variant="contained"
                         onClick={handleNext}
-                        sx={{ mr: 1 }}
+                        sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0 }}
                         disabled={activeStep === activity.instructions.length - 1}
                       >
-                        Next
+                        {isRTL ? 'הבא' : 'Next'}
                       </Button>
                       {activeStep > 0 && (
                         <Button
                           onClick={handleBack}
                         >
-                          Back
+                          {isRTL ? 'חזור' : 'Back'}
                         </Button>
                       )}
                     </Box>
@@ -298,13 +337,12 @@ const ActivityPage: React.FC = () => {
                 </Step>
               ))}
             </Stepper>
-          </Paper>
-            {/* Session info with enhanced gamification */}
+          </Paper>          {/* Session info with enhanced gamification */}
           {currentSession && (
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2, bgcolor: 'primary.main', color: 'white' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <DirectionsRunIcon sx={{ fontSize: 28, mr: 1 }} />
-                <Typography variant="h6" fontWeight="bold">
+              <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', mb: 2 }}>
+                <DirectionsRunIcon sx={{ fontSize: 28, mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0 }} />
+                <Typography variant="h6" fontWeight="bold" align={isRTL ? 'right' : 'left'}>
                   {currentSession.activityType}
                 </Typography>
               </Box>
@@ -320,7 +358,9 @@ const ActivityPage: React.FC = () => {
                     borderRadius: 2
                   }}>
                     <TimerIcon />
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>Duration</Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      {isRTL ? 'משך זמן' : 'Duration'}
+                    </Typography>
                     <Typography variant="h6" fontWeight="bold">{formatTime(timer)}</Typography>
                   </Box>
                 </Grid>
@@ -334,13 +374,14 @@ const ActivityPage: React.FC = () => {
                     borderRadius: 2
                   }}>
                     <EmojiEventsIcon />
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>Points</Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      {isRTL ? 'נקודות' : 'Points'}
+                    </Typography>
                     <Typography variant="h6" fontWeight="bold">{currentSession.points}</Typography>
                   </Box>
                 </Grid>
               </Grid>
-              
-              {timer >= 60 && (
+                {timer >= 60 && (
                 <Box sx={{ 
                   mt: 2, 
                   py: 1, 
@@ -348,11 +389,15 @@ const ActivityPage: React.FC = () => {
                   bgcolor: 'success.main', 
                   borderRadius: 2, 
                   display: 'flex',
+                  flexDirection: isRTL ? 'row-reverse' : 'row',
                   alignItems: 'center'
                 }}>
-                  <EmojiEventsIcon sx={{ mr: 1, fontSize: 20 }} />
-                  <Typography variant="body2" fontWeight="bold">
-                    Achievement: Active for {Math.floor(timer/60)} minute{timer >= 120 ? 's' : ''}!
+                  <EmojiEventsIcon sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0, fontSize: 20 }} />
+                  <Typography variant="body2" fontWeight="bold" align={isRTL ? 'right' : 'left'}>
+                    {isRTL 
+                      ? `הישג: פעיל במשך ${Math.floor(timer/60)} דקות${timer >= 120 ? '' : ''}!` 
+                      : `Achievement: Active for ${Math.floor(timer/60)} minute${timer >= 120 ? 's' : ''}!`
+                    }
                   </Typography>
                 </Box>
               )}
@@ -383,32 +428,36 @@ const ActivityPage: React.FC = () => {
                   animation: 'pulse 2s infinite'
                 }}
               />
-              
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <EmojiEventsIcon sx={{ mr: 1, fontSize: 30 }} />
-                <Typography variant="h5" fontWeight="bold">
-                  Activity Completed!
+                <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', mb: 2 }}>
+                <EmojiEventsIcon sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0, fontSize: 30 }} />
+                <Typography variant="h5" fontWeight="bold" align={isRTL ? 'right' : 'left'}>
+                  {isRTL ? 'הפעילות הושלמה!' : 'Activity Completed!'}
                 </Typography>
               </Box>
               
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                Awesome job! You've earned {currentSession?.points || 0} points for your activity.
+              <Typography variant="body1" sx={{ mb: 2 }} align={isRTL ? 'right' : 'left'}>
+                {isRTL 
+                  ? `עבודה מדהימה! הרווחת ${currentSession?.points || 0} נקודות עבור הפעילות שלך.`
+                  : `Awesome job! You've earned ${currentSession?.points || 0} points for your activity.`
+                }
               </Typography>
-              
-              <Box sx={{ 
+                <Box sx={{ 
                 mt: 2, 
                 p: 2, 
                 bgcolor: 'rgba(255,255,255,0.2)', 
                 borderRadius: 2,
-                textAlign: 'center'
+                textAlign: isRTL ? 'right' : 'center'
               }}>
                 {currentSession && timer >= 60 && (
-                  <Typography variant="body1" fontWeight="bold">
-                    New Achievement: {Math.floor(timer/60)} minute{timer >= 120 ? 's' : ''} of activity!
+                  <Typography variant="body1" fontWeight="bold" align={isRTL ? 'right' : 'center'}>
+                    {isRTL 
+                      ? `הישג חדש: ${Math.floor(timer/60)} דקות פעילות!` 
+                      : `New Achievement: ${Math.floor(timer/60)} minute${timer >= 120 ? 's' : ''} of activity!`
+                    }
                   </Typography>
                 )}
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  Returning to home screen...
+                <Typography variant="body2" sx={{ mt: 1 }} align={isRTL ? 'right' : 'center'}>
+                  {isRTL ? 'חוזר למסך הבית...' : 'Returning to home screen...'}
                 </Typography>
               </Box>
                 <Box

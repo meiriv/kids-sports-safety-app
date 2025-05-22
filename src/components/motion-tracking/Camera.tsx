@@ -1,6 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useMotion } from '../../context/MotionContext';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
+// Import MediaPipe dependencies
+import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
+import { POSE_CONNECTIONS } from '@mediapipe/pose';
 
 interface CameraProps {
   width?: number;
@@ -18,6 +23,9 @@ const Camera: React.FC<CameraProps> = ({
   
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
+  
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   
   const { 
     setVideoElement, 
@@ -240,9 +248,8 @@ const Camera: React.FC<CameraProps> = ({
               mr: 1,
               animation: 'pulsate 1.5s infinite ease-in-out'
             }} 
-          />
-          <Typography variant="body2" fontWeight="bold">
-            Recording
+          />          <Typography variant="body2" fontWeight="bold">
+            {isRTL ? 'מקליט' : 'Recording'}
           </Typography>
           <Box
             sx={{
@@ -272,12 +279,14 @@ const Camera: React.FC<CameraProps> = ({
             borderRadius: '8px'
           }}
         >
-          <CircularProgress color="primary" size={60} />
-          <Typography variant="h6" color="white" sx={{ mt: 2, fontWeight: 'bold' }}>
-            {modelLoading ? 'Loading Movement Detector...' : 'Setting up camera...'}
+          <CircularProgress color="primary" size={60} />          <Typography variant="h6" color="white" sx={{ mt: 2, fontWeight: 'bold' }} align={isRTL ? 'right' : 'left'}>
+            {isRTL 
+              ? (modelLoading ? 'טוען גלאי תנועה...' : 'מגדיר מצלמה...')
+              : (modelLoading ? 'Loading Movement Detector...' : 'Setting up camera...')
+            }
           </Typography>
-          <Typography variant="body2" color="white" sx={{ mt: 1, opacity: 0.8 }}>
-            Get ready to move and have fun!
+          <Typography variant="body2" color="white" sx={{ mt: 1, opacity: 0.8 }} align={isRTL ? 'right' : 'left'}>
+            {isRTL ? 'התכונן לזוז וליהנות!' : 'Get ready to move and have fun!'}
           </Typography>
           
           {/* Fun loading animation */}
@@ -336,12 +345,19 @@ const Camera: React.FC<CameraProps> = ({
             borderRadius: '8px',
             padding: 2
           }}
-        >
-          <Typography variant="h6" color="error">
-            Camera Error
+        >          <Typography variant="h6" color="error" align={isRTL ? 'right' : 'left'}>
+            {isRTL ? 'שגיאת מצלמה' : 'Camera Error'}
           </Typography>
-          <Typography variant="body1" color="white" align="center" sx={{ mt: 1 }}>
-            {cameraError}
+          <Typography variant="body1" color="white" align={isRTL ? 'right' : 'left'} sx={{ mt: 1 }}>
+            {isRTL 
+              ? (cameraError === 'Failed to access camera. Please check permissions.' 
+                  ? 'נכשלה הגישה למצלמה. אנא בדוק את ההרשאות.'
+                  : cameraError === 'Failed to start video stream' 
+                  ? 'נכשלה הפעלת זרם הוידאו.'
+                  : cameraError === 'Video element not found'
+                  ? 'לא נמצא רכיב וידאו.'
+                  : cameraError)
+              : cameraError}
           </Typography>
         </Box>
       )}
@@ -356,10 +372,12 @@ const Camera: React.FC<CameraProps> = ({
             bottom: 16, 
             left: '50%', 
             transform: 'translateX(-50%)'
-          }}
-          onClick={handleToggleTracking}
+          }}          onClick={handleToggleTracking}
         >
-          {isTracking ? "Stop Tracking" : "Start Tracking"}
+          {isRTL 
+            ? (isTracking ? "עצור מעקב" : "התחל מעקב")
+            : (isTracking ? "Stop Tracking" : "Start Tracking")
+          }
         </Button>
       )}
     </Box>

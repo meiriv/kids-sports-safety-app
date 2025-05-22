@@ -26,20 +26,25 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useAuth } from '../../context/AuthContext';
-
-// Navigation items for the drawer
-const navItems = [
-  { text: 'Home', icon: <HomeIcon />, path: '/' },
-  { text: 'Activities', icon: <FitnessCenterIcon />, path: '/activities' },
-  { text: 'Leaderboard', icon: <EmojiEventsIcon />, path: '/leaderboard' },
-  { text: 'Profile', icon: <PersonIcon />, path: '/profile' },
-  { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
-];
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
+import { CompactLanguageSelector } from '../common/LanguageSelector';
 
 const Layout: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [profileMenuAnchor, setProfileMenuAnchor] = useState<null | HTMLElement>(null);
   const { currentUser, logout } = useAuth();
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+  
+  // Navigation items for the drawer with translations
+  const navItems = [
+    { text: t('navigation.home'), icon: <HomeIcon />, path: '/' },
+    { text: t('navigation.activities'), icon: <FitnessCenterIcon />, path: '/activities' },
+    { text: t('navigation.leaderboard'), icon: <EmojiEventsIcon />, path: '/leaderboard' },
+    { text: t('navigation.profile'), icon: <PersonIcon />, path: '/profile' },
+    { text: t('navigation.settings'), icon: <SettingsIcon />, path: '/settings' },
+  ];
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -86,18 +91,20 @@ const Layout: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          
-          <Typography 
+            <Typography 
             variant="h6" 
             component="div" 
             sx={{ 
               flexGrow: 1, 
               fontWeight: 'bold',
-              fontFamily: '"Comic Sans MS", cursive, sans-serif'
+              fontFamily: '"Comic Sans MS", cursive, sans-serif',
+              textAlign: isRTL ? 'right' : 'left'
             }}
           >
-            Kids Sports Safety
+            {t('appName')}
           </Typography>
+          
+          <CompactLanguageSelector />
           
           {currentUser ? (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>

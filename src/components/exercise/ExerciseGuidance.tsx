@@ -14,6 +14,8 @@ import {
 import { Exercise } from '../../types/models';
 import { useGamification } from '../../context/GamificationContext';
 import { useMotion } from '../../context/MotionContext';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ExerciseGuidanceProps {
   exercise: Exercise;
@@ -96,14 +98,17 @@ const ExerciseGuidance: React.FC<ExerciseGuidanceProps> = ({
       onComplete();
     }
   };
-  
+    // Get language context
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+
   return (
     <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3 }}>
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
+      <Typography variant="h5" fontWeight="bold" gutterBottom align={isRTL ? 'right' : 'left'}>
         {exercise.name}
       </Typography>
       
-      <Typography variant="body1" paragraph>
+      <Typography variant="body1" paragraph align={isRTL ? 'right' : 'left'}>
         {exercise.description}
       </Typography>
       
@@ -129,11 +134,10 @@ const ExerciseGuidance: React.FC<ExerciseGuidanceProps> = ({
           )}
         </Card>
       )}
-      
-      {/* Difficulty indicator */}
-      <Box sx={{ mb: 3, display: 'flex', gap: 1 }}>
-        <Typography variant="body2">
-          <strong>Difficulty:</strong>
+        {/* Difficulty indicator */}
+      <Box sx={{ mb: 3, display: 'flex', gap: 1, flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+        <Typography variant="body2" align={isRTL ? 'right' : 'left'}>
+          <strong>{isRTL ? 'רמת קושי:' : 'Difficulty:'}</strong>
         </Typography>
         <Typography 
           variant="body2" 
@@ -143,45 +147,55 @@ const ExerciseGuidance: React.FC<ExerciseGuidanceProps> = ({
             'error.main'
           }
         >
-          {exercise.difficulty.charAt(0).toUpperCase() + exercise.difficulty.slice(1)}
+          {isRTL 
+            ? (exercise.difficulty === 'beginner' ? 'מתחיל' : 
+               exercise.difficulty === 'intermediate' ? 'בינוני' : 'מתקדם')
+            : exercise.difficulty.charAt(0).toUpperCase() + exercise.difficulty.slice(1)
+          }
         </Typography>
         
-        <Typography variant="body2" sx={{ ml: 2 }}>
-          <strong>Age Range:</strong> {exercise.minAge}-{exercise.maxAge} years
+        <Typography variant="body2" sx={{ ml: isRTL ? 0 : 2, mr: isRTL ? 2 : 0 }}>
+          <strong>{isRTL ? 'טווח גילאים:' : 'Age Range:'}</strong> {exercise.minAge}-{exercise.maxAge} {isRTL ? 'שנים' : 'years'}
         </Typography>
       </Box>
-      
-      {/* Step-by-step instructions */}
+        {/* Step-by-step instructions */}
       <Stepper activeStep={activeStep} orientation="vertical" sx={{ mb: 3 }}>
         {exercise.instructions.map((instruction, index) => (
           <Step key={index}>
             <StepLabel>
-              <Typography variant="subtitle1">Step {index + 1}</Typography>
+              <Typography variant="subtitle1" align={isRTL ? 'right' : 'left'}>
+                {isRTL ? `שלב ${index + 1}` : `Step ${index + 1}`}
+              </Typography>
             </StepLabel>
             <StepContent>
-              <Typography variant="body1">{instruction}</Typography>
-              <Box sx={{ mb: 2, mt: 2 }}>
+              <Typography variant="body1" align={isRTL ? 'right' : 'left'}>
+                {instruction}
+              </Typography>
+              <Box sx={{ mb: 2, mt: 2, display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
                 <Button
                   variant="contained"
                   onClick={handleNext}
-                  sx={{ mr: 1 }}
+                  sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0 }}
                 >
-                  {index === exercise.instructions.length - 1 ? 'Finish' : 'Next'}
+                  {index === exercise.instructions.length - 1 
+                    ? (isRTL ? 'סיים' : 'Finish') 
+                    : (isRTL ? 'הבא' : 'Next')
+                  }
                 </Button>
                 {index > 0 && (
                   <Button
                     onClick={handleBack}
                   >
-                    Back
+                    {isRTL ? 'חזור' : 'Back'}
                   </Button>
                 )}
                 
                 {index < exercise.instructions.length - 1 && (
                   <Button
-                    sx={{ ml: 2 }}
+                    sx={{ ml: isRTL ? 0 : 2, mr: isRTL ? 2 : 0 }}
                     onClick={() => speakInstruction(instruction)}
                   >
-                    Repeat
+                    {isRTL ? 'חזור שוב' : 'Repeat'}
                   </Button>
                 )}
               </Box>
@@ -189,15 +203,14 @@ const ExerciseGuidance: React.FC<ExerciseGuidanceProps> = ({
           </Step>
         ))}
       </Stepper>
-      
-      {/* Completion message */}
+        {/* Completion message */}
       {isCompleted && (
         <Box sx={{ p: 3, bgcolor: 'success.light', borderRadius: 1, color: 'white' }}>
-          <Typography variant="h6">
-            Great job! Exercise completed!
+          <Typography variant="h6" align={isRTL ? 'right' : 'left'}>
+            {isRTL ? 'כל הכבוד! התרגיל הושלם!' : 'Great job! Exercise completed!'}
           </Typography>
-          <Typography variant="body2">
-            You've earned points for completing this exercise.
+          <Typography variant="body2" align={isRTL ? 'right' : 'left'}>
+            {isRTL ? 'צברת נקודות עבור השלמת התרגיל הזה.' : 'You\'ve earned points for completing this exercise.'}
           </Typography>
         </Box>
       )}

@@ -12,6 +12,8 @@ import {
   Avatar
 } from '@mui/material';
 import { useGamification } from '../../context/GamificationContext';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
 
 const ActivityAchievements: React.FC = () => {
   const { 
@@ -23,47 +25,50 @@ const ActivityAchievements: React.FC = () => {
     getLeaderboardPositions
   } = useGamification();
   
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+  
   // Get user's positions in various leaderboards
   const leaderboardPositions = getLeaderboardPositions();
   
   return (
     <Box sx={{ mb: 4 }}>
       <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h5" fontWeight="bold">
-            Your Activity Stats
+        <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h5" fontWeight="bold" align={isRTL ? 'right' : 'left'}>
+            {t('gamification.activityStats')}
           </Typography>
           <Chip 
             color="primary" 
-            label={`${userPoints} Points`}
+            label={isRTL ? `${userPoints} נקודות` : `${userPoints} Points`}
             sx={{ fontWeight: 'bold', fontSize: '1rem', py: 2, px: 1 }}
           />
         </Box>
-        
-        {/* Current session info */}
+          {/* Current session info */}
         {currentSession && (
           <Box sx={{ mb: 3, p: 2, bgcolor: 'primary.light', color: 'white', borderRadius: 2 }}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Current Activity: {currentSession.activityType}
+            <Typography variant="subtitle1" fontWeight="bold" align={isRTL ? 'right' : 'left'}>
+              {isRTL ? `פעילות נוכחית: ${currentSession.activityType}` : `Current Activity: ${currentSession.activityType}`}
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-              <Typography variant="body2">
-                Duration: {Math.floor((Date.now() - currentSession.startTime.getTime()) / 1000)} seconds
+            <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', mt: 1 }}>
+              <Typography variant="body2" align={isRTL ? 'right' : 'left'}>
+                {isRTL 
+                  ? `משך זמן: ${Math.floor((Date.now() - currentSession.startTime.getTime()) / 1000)} שניות` 
+                  : `Duration: ${Math.floor((Date.now() - currentSession.startTime.getTime()) / 1000)} seconds`}
               </Typography>
-              <Typography variant="body2">
-                Points earned: {currentSession.points}
+              <Typography variant="body2" align={isRTL ? 'right' : 'left'}>
+                {isRTL ? `נקודות שהושגו: ${currentSession.points}` : `Points earned: ${currentSession.points}`}
               </Typography>
             </Box>
           </Box>
         )}
-        
-        {/* Level progress */}
+          {/* Level progress */}
         <Box sx={{ mb: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="body2" color="textSecondary">
-              Level Progress
+          <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
+            <Typography variant="body2" color="textSecondary" align={isRTL ? 'right' : 'left'}>
+              {isRTL ? 'התקדמות ברמה' : 'Level Progress'}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body2" color="textSecondary" align={isRTL ? 'right' : 'left'}>
               {userPoints % 1000} / 1000
             </Typography>
           </Box>
@@ -72,24 +77,23 @@ const ActivityAchievements: React.FC = () => {
             value={(userPoints % 1000) / 10} 
             sx={{ height: 10, borderRadius: 5, mt: 1 }}
           />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
+          <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', mt: 1 }}>
             <Chip 
-              label={`Level ${Math.floor(userPoints / 1000) + 1}`} 
+              label={isRTL ? `רמה ${Math.floor(userPoints / 1000) + 1}` : `Level ${Math.floor(userPoints / 1000) + 1}`} 
               size="small" 
               color="secondary" 
             />
             <Chip 
-              label={`Level ${Math.floor(userPoints / 1000) + 2}`} 
+              label={isRTL ? `רמה ${Math.floor(userPoints / 1000) + 2}` : `Level ${Math.floor(userPoints / 1000) + 2}`} 
               size="small" 
               variant="outlined" 
             />
           </Box>
         </Box>
-        
-        {/* Leaderboard positions */}
+          {/* Leaderboard positions */}
         <Box sx={{ mb: 3 }}>
-          <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-            Your Rankings
+          <Typography variant="subtitle1" fontWeight="bold" gutterBottom align={isRTL ? 'right' : 'left'}>
+            {isRTL ? 'הדירוגים שלך' : 'Your Rankings'}
           </Typography>
           <Grid container spacing={2}>
             {Object.entries(leaderboardPositions).map(([boardId, position]) => {

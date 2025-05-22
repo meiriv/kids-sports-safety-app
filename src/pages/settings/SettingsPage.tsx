@@ -28,6 +28,9 @@ import WearableDeviceManager from '../../components/wearable/WearableDeviceManag
 import { useAuth } from '../../context/AuthContext';
 import { EmergencyContact } from '../../types/models';
 import { useEmergency } from '../../context/EmergencyContext';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
+import LanguageSelector from '../../components/common/LanguageSelector';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,6 +66,8 @@ const SettingsPage: React.FC = () => {
   
   const { currentUser } = useAuth();
   const { emergencyContacts, setEmergencyContacts } = useEmergency();
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -161,9 +166,21 @@ const SettingsPage: React.FC = () => {
               Settings saved successfully!
             </Alert>
           )}
+            <Typography variant="h6" gutterBottom>
+            {t('settings.language')}
+          </Typography>
+          
+          <Box sx={{ mb: 4 }}>
+            <LanguageSelector />
+            <Typography variant="body2" color="textSecondary" sx={{ mt: 1, ml: 4 }}>
+              {isRTL ? 'שינוי השפה ישפיע על כל תוכן האפליקציה וכיוון הטקסט' : 'Changing the language will affect all app content and text direction'}
+            </Typography>
+          </Box>
+          
+          <Divider sx={{ my: 3 }} />
           
           <Typography variant="h6" gutterBottom>
-            Preferences
+            {t('settings.notifications')}
           </Typography>
           
           <Box sx={{ mb: 4 }}>
@@ -175,7 +192,7 @@ const SettingsPage: React.FC = () => {
                   color="primary"
                 />
               }
-              label="Enable app notifications"
+              label={t('settings.notifications')}
             />
             <Typography variant="body2" color="textSecondary" sx={{ mt: 0.5, ml: 4 }}>
               Receive notifications for achievements, reminders and activity suggestions
@@ -254,13 +271,12 @@ const SettingsPage: React.FC = () => {
               <option value="high">High</option>
             </TextField>
           </Box>
-          
-          <Button 
+            <Button 
             variant="contained" 
             onClick={handleSaveGeneralSettings}
             sx={{ mt: 2 }}
           >
-            Save Settings
+            {t('buttons.save')}
           </Button>
         </TabPanel>
         

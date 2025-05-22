@@ -1,0 +1,93 @@
+{
+  "appName": "אפליקציית ספורט ובטיחות לילדים",
+  "navigation": {
+    "home": "בית",
+    "activities": "פעילויות",
+    "profile": "פרופיל",
+    "settings": "הגדרות",
+    "leaderboard": "טבלת מובילים"
+  },
+  "home": {
+    "welcome": "ברוכים הבאים לאפליקציית ספורט ובטיחות לילדים",
+    "subtitle": "הישארו פעילים ובטוחים תוך כדי הנאה!",
+    "startActivity": "התחל פעילות חדשה",
+    "recommendedExercises": "תרגילים מומלצים",
+    "viewAll": "צפה בהכל",
+    "achievements": "ההישגים שלך",
+    "stats": "נתוני פעילות"
+  },
+  "activities": {
+    "title": "בחר פעילות",
+    "freestyle": {
+      "title": "משחק חופשי",
+      "description": "תנועה חופשית - לרוץ, לקפוץ ולהנות!",
+      "instructions": [
+        "נוע בחופשיות מול המצלמה",
+        "נסה תנועות שונות כדי לצבור נקודות",
+        "תהנה ותהיה פעיל!"
+      ]
+    },
+    "dance": {
+      "title": "מסיבת ריקודים",
+      "description": "הציגו את תנועות הריקוד הכי מגניבות שלכם!",
+      "instructions": [
+        "רקדו למוזיקה האהובה עליכם",
+        "השתמשו בכל הגוף",
+        "שמרו על הקצב ותהנו!"
+      ]
+    },
+    "sports": {
+      "title": "אימון ספורט",
+      "description": "תרגלו את מיומנויות הספורט האהובות עליכם",
+      "instructions": [
+        "בחרו את תנועת הספורט האהובה עליכם",
+        "תרגלו את התנועה מול המצלמה",
+        "קבלו משוב על הצורה שלכם"
+      ]
+    },
+    "start": "התחל הקלטה",
+    "stop": "עצור הקלטה",
+    "cameraAccess": "נדרשת גישה למצלמה עבור פעילות זו"
+  },
+  "gamification": {
+    "points": "נקודות",
+    "level": "רמה",
+    "achievements": "הישגים",
+    "personalBests": "שיאים אישיים",
+    "dailyChallenge": "אתגר יומי",
+    "weeklyStars": "כוכבים שבועיים",
+    "activityStats": "נתוני הפעילות שלך",
+    "achievementTitles": {
+      "firstSteps": "צעדים ראשונים",
+      "perfectForm": "צורה מושלמת",
+      "onFire": "בלהבות"
+    }
+  },
+  "settings": {
+    "title": "הגדרות",
+    "language": "שפה",
+    "english": "English",
+    "hebrew": "עברית",
+    "notifications": "התראות",
+    "privacy": "פרטיות",
+    "help": "עזרה ותמיכה",
+    "about": "אודות",
+    "emergencyContacts": "אנשי קשר לחירום",
+    "darkMode": "מצב כהה"
+  },
+  "auth": {
+    "signIn": "התחברות",
+    "signUp": "הרשמה",
+    "signOut": "התנתקות",
+    "email": "דוא\"ל",
+    "password": "סיסמה",
+    "forgotPassword": "שכחת סיסמה?"
+  },
+  "buttons": {
+    "save": "שמור",
+    "cancel": "בטל",
+    "confirm": "אשר",
+    "back": "חזור",
+    "next": "הבא"
+  }
+}

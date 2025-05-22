@@ -1,5 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
-  <rect width="300" height="200" fill="#f0f4f8" rx="10" ry="10"/>
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fdf2f8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbcfe8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="300" height="200" fill="url(#bg-gradient)" rx="10" ry="10"/>
   
   <!-- Dance Party Figure -->
   <g transform="translate(150, 100)">

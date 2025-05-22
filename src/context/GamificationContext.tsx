@@ -149,29 +149,26 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     // This would normally fetch achievement details from a database
     // For now, we'll use mock achievements
     const mockAchievements: Record<string, Achievement> = {
-      'first-session': {
-        id: 'first-session',
+      'first-session': {        id: 'first-session',
         name: 'First Steps',
         description: 'Completed your first activity session',
-        iconUrl: '/assets/achievements/star-achievement.svg',
+        iconUrl: `${process.env.PUBLIC_URL}/assets/achievements/star-achievement.svg`,
         pointsAwarded: 50,
         dateEarned: new Date(),
         type: 'star'
       },
-      'perfect-form': {
-        id: 'perfect-form',
+      'perfect-form': {        id: 'perfect-form',
         name: 'Perfect Form',
         description: 'Achieved perfect form during an exercise',
-        iconUrl: '/assets/achievements/checkmark-achievement.svg',
+        iconUrl: `${process.env.PUBLIC_URL}/assets/achievements/checkmark-achievement.svg`,
         pointsAwarded: 100,
         dateEarned: new Date(),
         type: 'checkmark'
       },
-      'streak-3': {
-        id: 'streak-3',
+      'streak-3': {        id: 'streak-3',
         name: 'On Fire',
         description: 'Completed activities 3 days in a row',
-        iconUrl: '/assets/achievements/first-aid-achievement.svg',
+        iconUrl: `${process.env.PUBLIC_URL}/assets/achievements/first-aid-achievement.svg`,
         pointsAwarded: 150,
         dateEarned: new Date(),
         type: 'first-aid'

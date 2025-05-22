@@ -1,0 +1,93 @@
+{
+  "appName": "Kids Sports Safety App",
+  "navigation": {
+    "home": "Home",
+    "activities": "Activities",
+    "profile": "Profile",
+    "settings": "Settings",
+    "leaderboard": "Leaderboard"
+  },
+  "home": {
+    "welcome": "Welcome to Kids Sports Safety App",
+    "subtitle": "Stay active and safe while having fun!",
+    "startActivity": "Start New Activity",
+    "recommendedExercises": "Recommended Exercises",
+    "viewAll": "View All",
+    "achievements": "Your Achievements",
+    "stats": "Activity Stats"
+  },
+  "activities": {
+    "title": "Choose an Activity",
+    "freestyle": {
+      "title": "Freestyle Play",
+      "description": "Move freely - run, jump, hop, and have tons of fun!",
+      "instructions": [
+        "Move around freely in front of the camera",
+        "Try different movements to earn points",
+        "Have fun and be active!"
+      ]
+    },
+    "dance": {
+      "title": "Dance Party",
+      "description": "Show off your coolest dance moves and grooves!",
+      "instructions": [
+        "Dance to your favorite music",
+        "Try to use your whole body",
+        "Keep the rhythm and have fun!"
+      ]
+    },
+    "sports": {
+      "title": "Sports Practice",
+      "description": "Practice your favorite sports skills and movements",
+      "instructions": [
+        "Choose your favorite sport movement",
+        "Practice the movement in front of the camera",
+        "Get feedback on your form"
+      ]
+    },
+    "start": "Start Recording",
+    "stop": "Stop Recording",
+    "cameraAccess": "Camera access is required for this activity"
+  },
+  "gamification": {
+    "points": "Points",
+    "level": "Level",
+    "achievements": "Achievements",
+    "personalBests": "Personal Bests",
+    "dailyChallenge": "Daily Challenge",
+    "weeklyStars": "Weekly Stars",
+    "activityStats": "Your Activity Stats",
+    "achievementTitles": {
+      "firstSteps": "First Steps",
+      "perfectForm": "Perfect Form",
+      "onFire": "On Fire"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "english": "English",
+    "hebrew": "עברית",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "help": "Help & Support",
+    "about": "About",
+    "emergencyContacts": "Emergency Contacts",
+    "darkMode": "Dark Mode"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next"
+  }
+}
