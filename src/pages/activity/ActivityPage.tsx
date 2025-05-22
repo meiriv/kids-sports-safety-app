@@ -29,12 +29,11 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 
 // Predefined activities
-const activityTypes = [
-  {
+const activityTypes = [  {
     id: 'freestyle',
     name: 'Freestyle Play',
     description: 'Free movement play - run, jump, and have fun!',
-    imageUrl: 'https://via.placeholder.com/600x300?text=Freestyle+Play',
+    imageUrl: 'https://images.unsplash.com/photo-1601959366565-7c6cba2260bb?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     instructions: [
       'Move around freely in front of the camera',
       'Try different movements to earn points',
@@ -45,7 +44,7 @@ const activityTypes = [
     id: 'dance',
     name: 'Dance',
     description: 'Show off your best dance moves!',
-    imageUrl: 'https://via.placeholder.com/600x300?text=Dance',
+    imageUrl: 'https://images.unsplash.com/photo-1487525219765-1a7c245c42c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     instructions: [
       'Dance to your favorite music',
       'Try to use your whole body',
@@ -56,7 +55,7 @@ const activityTypes = [
     id: 'sports',
     name: 'Sports Practice',
     description: 'Practice your sports skills',
-    imageUrl: 'https://via.placeholder.com/600x300?text=Sports+Practice',
+    imageUrl: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     instructions: [
       'Choose your favorite sport movement',
       'Practice the movement in front of the camera',

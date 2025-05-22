@@ -129,27 +129,26 @@ const HomePage: React.FC = () => {
     }
   ];
   
-  const recommendedExercises = [
-    {
+  const recommendedExercises = [    {
       id: 'jumping-jacks',
       title: 'Jumping Jacks',
       difficulty: 'beginner',
       ageRange: '5-12',
-      imageUrl: 'https://via.placeholder.com/300x140?text=Jumping+Jacks'
+      imageUrl: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
     },
     {
       id: 'squats',
       title: 'Squats',
       difficulty: 'intermediate',
       ageRange: '6-12',
-      imageUrl: 'https://via.placeholder.com/300x140?text=Squats'
+      imageUrl: 'https://images.unsplash.com/photo-1567598508481-65985588e45b?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
     },
     {
       id: 'arm-circles',
       title: 'Arm Circles',
       difficulty: 'beginner',
       ageRange: '5-10',
-      imageUrl: 'https://via.placeholder.com/300x140?text=Arm+Circles'
+      imageUrl: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
     }
   ];
   

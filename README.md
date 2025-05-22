@@ -1,12 +1,19 @@
-# Getting Started with Create React App
+# Kids Sports Safety App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application designed to help kids stay active and safe while having fun with various physical activities.
+
+## Features
+
+- **Activity Tracking**: Uses camera-based motion detection to track kids' movements during activities
+- **Multiple Activity Types**: Freestyle play, dance, and sports practice modes
+- **Gamification**: Points system and achievements to motivate kids to stay active
+- **Real-time Feedback**: Visual feedback on activity intensity and performance
+- **Kid-friendly Interface**: Colorful, engaging design specifically for children
 
 ## Quick start:
     1. git clone https://github.com/meiriv/kids-sports-safety-app.git
     2. npm install
-    3. npm run build
-    4. npm start
+    3. npm start
 ## Available Scripts
 
 In the project directory, you can run:
@@ -49,3 +56,73 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## How to Use
+
+1. From the home page, click on "Start New Activity" to begin
+2. Choose an activity type (Freestyle Play, Dance Party, or Sports Practice)
+3. Allow camera access when prompted
+4. Click "Start Recording" to begin the activity session
+5. Move around in front of the camera to see real-time feedback
+6. Earn points by staying active
+7. Click "Stop Recording" when finished to see your results
+
+## Activity Types
+
+### Freestyle Play
+Free movement play with no specific patterns required. Just have fun running, jumping, and moving around!
+
+### Dance Party
+Show off your dance moves and grooves to the rhythm. All movement styles are encouraged!
+
+### Sports Practice
+Practice your favorite sports movements and get feedback on your form and technique.
+
+## Technical Implementation
+
+### Motion Detection
+
+The app uses TensorFlow.js with the MoveNet model for real-time pose detection:
+
+- Detects 17 key body points (nose, shoulders, elbows, wrists, etc.)
+- Provides confidence scores for each detected point
+- Analyzes movement patterns to determine activity levels
+
+### Component Architecture
+
+- **MotionContext**: Provides camera access and pose detection capabilities
+- **GamificationContext**: Manages activity sessions, points, and achievements
+- **ActivityPage**: Main interface for activity recording and feedback
+- **MotionFeedback**: Analyzes pose data to provide real-time feedback
+- **Camera**: Handles video capture and pose visualization
+
+### Safety Features
+
+- Emergency contact system for immediate assistance
+- Activity monitoring to prevent overexertion
+- Form analysis to encourage proper movement techniques
+
+## Developer Instructions
+
+### Adding New Activities
+
+To add a new activity type:
+
+1. Add the activity definition to `activityTypes` array in `ActivitySelectionPage.tsx`
+2. Add specific movement detection logic in `MotionFeedback.tsx`
+3. Update the UI to include the new activity option
+
+### Customizing Feedback
+
+The feedback system can be customized in `MotionFeedback.tsx`:
+
+```tsx
+// Example of customizing feedback thresholds
+if (motionIntensity > 60) {
+  setFeedback('Great job! Keep moving!');
+} else if (motionIntensity > 30) {
+  setFeedback('Good! Try to move a bit more');
+} else {
+  setFeedback('Move around more to earn points!');
+}
+```

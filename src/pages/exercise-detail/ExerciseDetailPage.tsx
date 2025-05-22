@@ -31,7 +31,7 @@ const mockExercises: Exercise[] = [
       'Jump again and return to the starting position.',
       'Repeat for 10-15 repetitions.'
     ],
-    imageUrl: 'https://via.placeholder.com/600x300?text=Jumping+Jacks',
+    imageUrl: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     motionKeypoints: [
       {
         id: 'arms-up',
@@ -62,7 +62,7 @@ const mockExercises: Exercise[] = [
       'Push through your heels to stand back up.',
       'Repeat for 8-12 repetitions.'
     ],
-    imageUrl: 'https://via.placeholder.com/600x300?text=Squats',
+    imageUrl: 'https://images.unsplash.com/photo-1567598508481-65985588e45b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     motionKeypoints: [
       {
         id: 'knee-bend',
