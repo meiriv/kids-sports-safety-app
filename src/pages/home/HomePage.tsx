@@ -141,9 +141,9 @@ interface Friend {
 }
 
 const mockFriends: Friend[] = [
-  { id: '1', name: 'Alex', avatarUrl: '', weeklyScore: 410 },
-  { id: '2', name: 'Jamie', avatarUrl: '', weeklyScore: 350 },
-  { id: '3', name: 'Taylor', avatarUrl: '', weeklyScore: 290 },
+  { id: '1', name: 'ירון', avatarUrl: '', weeklyScore: 410 },
+  { id: '2', name: 'אייל', avatarUrl: '', weeklyScore: 350 },
+  { id: '3', name: 'מאור', avatarUrl: '', weeklyScore: 290 },
 ];
 
 const FriendsLeaderboard: React.FC<{ friends: Friend[] }> = ({ friends }) => (
