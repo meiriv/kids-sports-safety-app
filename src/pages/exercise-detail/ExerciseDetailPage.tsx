@@ -62,7 +62,7 @@ const mockExercises: Exercise[] = [
       'Push through your heels to stand back up.',
       'Repeat for 8-12 repetitions.'
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1567598508481-65985588e45b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     motionKeypoints: [
       {
         id: 'knee-bend',

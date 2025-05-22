@@ -135,13 +135,12 @@ const HomePage: React.FC = () => {
       difficulty: 'beginner',
       ageRange: '5-12',
       imageUrl: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
-    },
-    {
+    },    {
       id: 'squats',
       title: 'Squats',
       difficulty: 'intermediate',
       ageRange: '6-12',
-      imageUrl: 'https://images.unsplash.com/photo-1567598508481-65985588e45b?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
+      imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
     },
     {
       id: 'arm-circles',
