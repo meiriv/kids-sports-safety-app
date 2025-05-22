@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <rect width="300" height="200" fill="#f0f4f8" rx="10" ry="10"/>
+  
+  <!-- Sports Practice Figure -->
+  <g transform="translate(150, 100)">
+    <!-- Head -->
+    <circle cx="0" cy="-55" r="15" fill="#059669"/>
+    
+    <!-- Body -->
+    <line x1="0" y1="-40" x2="0" y2="0" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Arms - Sports Position -->
+    <line x1="0" y1="-30" x2="-40" y2="-10" stroke="#059669" stroke-width="6" stroke-linecap="round"/>
+    <line x1="-40" y1="-10" x2="-30" y2="10" stroke="#059669" stroke-width="6" stroke-linecap="round"/>
+    <line x1="0" y1="-30" x2="20" y2="-15" stroke="#059669" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- Legs - Running Position -->
+    <line x1="0" y1="0" x2="-15" y2="35" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="25" y2="20" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Ball -->
+  <circle cx="120" cy="130" r="15" fill="#059669" stroke="#047857" stroke-width="2"/>
+  <path d="M110,130 L130,130 M120,120 L120,140" stroke="#047857" stroke-width="2"/>
+  
+  <!-- Motion Lines -->
+  <path d="M200,70 L220,60" stroke="#059669" stroke-width="2" stroke-dasharray="4 2"/>
+  <path d="M200,80 L220,80" stroke="#059669" stroke-width="2" stroke-dasharray="4 2"/>
+  <path d="M200,90 L220,100" stroke="#059669" stroke-width="2" stroke-dasharray="4 2"/>
+  
+  <text x="150" y="180" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#065f46">Sports Practice</text>
+</svg>

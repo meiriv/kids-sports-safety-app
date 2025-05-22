@@ -47,6 +47,7 @@ export interface Achievement {
   iconUrl: string;
   pointsAwarded: number;
   dateEarned: Date;
+  type?: 'star' | 'checkmark' | 'first-aid';
 }
 
 export interface FeedbackItem {

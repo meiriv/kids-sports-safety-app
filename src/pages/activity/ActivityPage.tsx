@@ -29,33 +29,29 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 
 // Predefined activities
-const activityTypes = [  {
-    id: 'freestyle',
+const activityTypes = [  {    id: 'freestyle',
     name: 'Freestyle Play',
     description: 'Free movement play - run, jump, and have fun!',
-    imageUrl: 'https://images.unsplash.com/photo-1601959366565-7c6cba2260bb?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,
     instructions: [
       'Move around freely in front of the camera',
       'Try different movements to earn points',
       'Have fun and be active!'
     ]
-  },
-  {
-    id: 'dance',
+  },{    id: 'dance',
     name: 'Dance',
     description: 'Show off your best dance moves!',
-    imageUrl: 'https://images.unsplash.com/photo-1487525219765-1a7c245c42c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
     instructions: [
       'Dance to your favorite music',
       'Try to use your whole body',
       'Keep the rhythm and have fun!'
     ]
   },
-  {
-    id: 'sports',
+  {    id: 'sports',
     name: 'Sports Practice',
     description: 'Practice your sports skills',
-    imageUrl: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,
     instructions: [
       'Choose your favorite sport movement',
       'Practice the movement in front of the camera',

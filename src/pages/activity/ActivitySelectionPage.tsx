@@ -14,32 +14,26 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 // Available activity types with improved descriptions and kid-friendly details
-const activityTypes = [
-  {
-    id: 'freestyle',
+const activityTypes = [  {    id: 'freestyle',
     name: 'Freestyle Play',
     description: 'Move freely - run, jump, hop, and have tons of fun!',
-    imageUrl: 'https://images.unsplash.com/photo-1601959366565-7c6cba2260bb?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,
     level: 'All levels',
     duration: '5-15 min',
     pointsEstimate: '50-150',
     emoji: '🏃‍♂️',
-  },
-  {
-    id: 'dance',
+  },{    id: 'dance',
     name: 'Dance Party',
     description: 'Show off your coolest dance moves and grooves!',
-    imageUrl: 'https://images.unsplash.com/photo-1487525219765-1a7c245c42c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
     level: 'All levels',
     duration: '5-15 min',
     pointsEstimate: '50-200',
     emoji: '💃',
-  },
-  {
-    id: 'sports',
+  },  {    id: 'sports',
     name: 'Sports Practice',
     description: 'Practice your favorite sports skills and movements',
-    imageUrl: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,
     level: 'All levels',
     duration: '5-15 min',
     pointsEstimate: '50-150',

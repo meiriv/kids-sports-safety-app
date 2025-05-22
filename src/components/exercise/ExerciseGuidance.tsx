@@ -120,10 +120,9 @@ const ExerciseGuidance: React.FC<ExerciseGuidanceProps> = ({
               <source src={exercise.videoUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-          ) : (
-            <CardMedia
+          ) : (            <CardMedia
               component="img"
-              image={exercise.imageUrl || 'https://via.placeholder.com/600x300?text=Exercise+Illustration'}
+              image={exercise.imageUrl || 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80'}
               alt={exercise.name}
               sx={{ maxHeight: 300, objectFit: 'cover' }}
             />

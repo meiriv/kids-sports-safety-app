@@ -74,11 +74,10 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
   onClick 
 }) => (
   <Card sx={{ height: '100%', borderRadius: 3, overflow: 'hidden' }}>
-    <CardActionArea onClick={onClick} sx={{ height: '100%' }}>
-      <CardMedia
+    <CardActionArea onClick={onClick} sx={{ height: '100%' }}>      <CardMedia
         component="img"
         height="140"
-        image={imageUrl || 'https://via.placeholder.com/300x140?text=Exercise+Image'}
+        image={imageUrl || 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'}
         alt={title}
       />
       <CardContent>

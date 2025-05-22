@@ -174,11 +174,10 @@ const ActivityAchievements: React.FC = () => {
         <Grid container spacing={2}>
           {userAchievements.map(achievement => (
             <Grid item xs={12} sm={6} md={4} key={achievement.id}>
-              <Card sx={{ display: 'flex', height: '100%' }}>
-                <CardMedia
+              <Card sx={{ display: 'flex', height: '100%' }}>                <CardMedia
                   component="img"
                   sx={{ width: 80 }}
-                  image={achievement.iconUrl || 'https://via.placeholder.com/80'}
+                  image={achievement.iconUrl || `${process.env.PUBLIC_URL}/assets/achievements/${achievement.type || 'star'}-achievement.svg`}
                   alt={achievement.name}
                 />
                 <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>

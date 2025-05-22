@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <rect width="300" height="200" fill="#f0f4f8" rx="10" ry="10"/>
+  
+  <!-- Jumping Jack Figure -->
+  <g transform="translate(150, 100)">
+    <!-- Head -->
+    <circle cx="0" cy="-60" r="15" fill="#3b82f6"/>
+    
+    <!-- Body -->
+    <line x1="0" y1="-45" x2="0" y2="0" stroke="#3b82f6" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Arms -->
+    <line x1="0" y1="-35" x2="-40" y2="-15" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+    <line x1="0" y1="-35" x2="40" y2="-15" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- Legs -->
+    <line x1="0" y1="0" x2="-30" y2="45" stroke="#3b82f6" stroke-width="8" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="30" y2="45" stroke="#3b82f6" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  
+  <text x="150" y="180" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#1e40af">Jumping Jacks</text>
+</svg>

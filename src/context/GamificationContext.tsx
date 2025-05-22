@@ -145,7 +145,6 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setUserPoints(prev => prev + points);
     }
   };
-
   const awardAchievement = (achievementId: string) => {
     // This would normally fetch achievement details from a database
     // For now, we'll use mock achievements
@@ -154,25 +153,28 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         id: 'first-session',
         name: 'First Steps',
         description: 'Completed your first activity session',
-        iconUrl: '/achievements/first-steps.png',
+        iconUrl: '/assets/achievements/star-achievement.svg',
         pointsAwarded: 50,
-        dateEarned: new Date()
+        dateEarned: new Date(),
+        type: 'star'
       },
       'perfect-form': {
         id: 'perfect-form',
         name: 'Perfect Form',
         description: 'Achieved perfect form during an exercise',
-        iconUrl: '/achievements/perfect-form.png',
+        iconUrl: '/assets/achievements/checkmark-achievement.svg',
         pointsAwarded: 100,
-        dateEarned: new Date()
+        dateEarned: new Date(),
+        type: 'checkmark'
       },
       'streak-3': {
         id: 'streak-3',
         name: 'On Fire',
         description: 'Completed activities 3 days in a row',
-        iconUrl: '/achievements/streak.png',
+        iconUrl: '/assets/achievements/first-aid-achievement.svg',
         pointsAwarded: 150,
-        dateEarned: new Date()
+        dateEarned: new Date(),
+        type: 'first-aid'
       }
     };
 
