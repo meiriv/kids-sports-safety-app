@@ -125,9 +125,10 @@ const ActivityAchievements: React.FC = () => {
                     <Box>
                       <Typography variant="body2" fontWeight="bold">
                         {board.name}
-                      </Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        Rank {position} of {board.entries.length}
+                      </Typography>                      <Typography variant="caption" color="textSecondary">
+                        {isRTL
+                          ? `דירוג ${position} מתוך ${board.entries.length}`
+                          : `Rank ${position} of ${board.entries.length}`}
                       </Typography>
                     </Box>
                   </Box>
@@ -139,9 +140,8 @@ const ActivityAchievements: React.FC = () => {
         
         {/* Personal bests */}
         {Object.keys(personalBests).length > 0 && (
-          <Box>
-            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-              Personal Bests
+          <Box>            <Typography variant="subtitle1" fontWeight="bold" gutterBottom align={isRTL ? 'right' : 'left'}>
+              {t('gamification.personalBests')}
             </Typography>
             <Grid container spacing={1}>
               {Object.entries(personalBests).map(([activity, points]) => (
@@ -157,9 +157,8 @@ const ActivityAchievements: React.FC = () => {
                   >
                     <Typography variant="body2">
                       {activity}
-                    </Typography>
-                    <Typography variant="body2" fontWeight="bold">
-                      {points} pts
+                    </Typography>                    <Typography variant="body2" fontWeight="bold">
+                      {points} {isRTL ? 'נק׳' : 'pts'}
                     </Typography>
                   </Box>
                 </Grid>
@@ -168,10 +167,9 @@ const ActivityAchievements: React.FC = () => {
           </Box>
         )}
       </Paper>
-      
-      {/* Achievements */}
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
-        Your Achievements
+        {/* Achievements */}
+      <Typography variant="h5" fontWeight="bold" gutterBottom align={isRTL ? 'right' : 'left'}>
+        {t('gamification.achievements')}
       </Typography>
       
       {userAchievements.length > 0 ? (
@@ -208,10 +206,9 @@ const ActivityAchievements: React.FC = () => {
             </Grid>
           ))}
         </Grid>
-      ) : (
-        <Paper elevation={1} sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
+      ) : (        <Paper elevation={1} sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
           <Typography variant="body1" color="textSecondary">
-            Complete activities to earn achievements!
+            {isRTL ? 'השלם פעילויות כדי לזכות בהישגים!' : 'Complete activities to earn achievements!'}
           </Typography>
         </Paper>
       )}

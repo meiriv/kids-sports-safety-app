@@ -146,30 +146,36 @@ const mockFriends: Friend[] = [
   { id: '3', name: 'מאור', avatarUrl: '', weeklyScore: 290 },
 ];
 
-const FriendsLeaderboard: React.FC<{ friends: Friend[] }> = ({ friends }) => (
+const FriendsLeaderboard: React.FC<{ friends: Friend[] }> = ({ friends }) => {
+  const { isRTL } = useLanguage();
+  
+  return (
   <Paper elevation={2} sx={{ p: 2, borderRadius: 3, mb: 4 }}>
-    <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-      Friends Leaderboard
+    <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }} align={isRTL ? 'right' : 'left'}>
+      {isRTL ? 'טבלת חברים מובילים' : 'Friends Leaderboard'}
     </Typography>
     <Grid container spacing={2}>
       {friends.map(friend => (
-        <Grid item xs={12} sm={4} key={friend.id}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Grid item xs={12} sm={4} key={friend.id}>          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 2,
+            flexDirection: isRTL ? 'row-reverse' : 'row'
+          }}>
             <Avatar src={friend.avatarUrl}>
               {friend.name[0]}
-            </Avatar>
-            <Box>
-              <Typography variant="subtitle1" fontWeight="bold">{friend.name}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                Weekly Score: <b>{friend.weeklyScore}</b>
+            </Avatar><Box>
+              <Typography variant="subtitle1" fontWeight="bold" align={isRTL ? 'right' : 'left'}>{friend.name}</Typography>
+              <Typography variant="body2" color="text.secondary" align={isRTL ? 'right' : 'left'}>
+                {isRTL ? 'ניקוד שבועי: ' : 'Weekly Score: '}<b>{friend.weeklyScore}</b>
               </Typography>
             </Box>
           </Box>
-        </Grid>
-      ))}
+        </Grid>      ))}
     </Grid>
   </Paper>
-);
+  );
+};
 
 
 const HomePage: React.FC = () => {
@@ -178,41 +184,39 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
-  
-  // Simulated data - in a real app this would be fetched from an API
+    // Simulated data - in a real app this would be fetched from an API
   const recentActivities = [
     {
       id: 'act1',
-      type: 'Jumping Jacks',
+      type: isRTL ? t('activities.exercises.jumpingJacks.title') : 'Jumping Jacks',
       date: '2023-05-19',
-      duration: '10 minutes',
+      duration: isRTL ? '10 דקות' : '10 minutes',
       points: 120
     },
     {
       id: 'act2',
-      type: 'Squats',
+      type: isRTL ? t('activities.exercises.squats.title') : 'Squats',
       date: '2023-05-18',
-      duration: '8 minutes',
+      duration: isRTL ? '8 דקות' : '8 minutes',
       points: 95
     }
   ];
-  
-  const recommendedExercises = [    {
+    const recommendedExercises = [    {
       id: 'jumping-jacks',
-      title: 'Jumping Jacks',
+      title: isRTL ? t('activities.exercises.jumpingJacks.title') : 'Jumping Jacks',
       difficulty: 'beginner',
       ageRange: '5-12',
       imageUrl: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
     },    {
       id: 'squats',
-      title: 'Squats',
+      title: isRTL ? t('activities.exercises.squats.title') : 'Squats',
       difficulty: 'intermediate',
       ageRange: '6-12',
       imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
     },
     {
       id: 'arm-circles',
-      title: 'Arm Circles',
+      title: isRTL ? t('activities.exercises.armCircles.title', 'Arm Circles') : 'Arm Circles',
       difficulty: 'beginner',
       ageRange: '5-10',
       imageUrl: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
@@ -421,8 +425,7 @@ const HomePage: React.FC = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {recentActivities.length > 0 ? (
           recentActivities.map(activity => (          <Grid item xs={12} sm={6} md={4} key={activity.id}>
-              <Card elevation={2} sx={{ borderRadius: 2 }}>
-                <CardActionArea onClick={() => navigate(`/activities/${activity.id}`)}>                  <CardContent>
+              <Card elevation={2} sx={{ borderRadius: 2 }}>                <CardActionArea onClick={() => navigate(`/activities/${activity.id}`)}>                  <CardContent>
                     <Typography variant="h6" component="div" align={isRTL ? 'right' : 'left'}>
                       {activity.type}
                     </Typography>

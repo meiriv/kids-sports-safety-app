@@ -9,6 +9,9 @@ import {
   CircularProgress
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { type TFunction } from 'i18next';
+import { useLanguage } from '../../context/LanguageContext';
 import Camera from '../../components/motion-tracking/Camera';
 import PoseAnalyzer from '../../components/exercise/PoseAnalyzer';
 import ExerciseGuidance from '../../components/exercise/ExerciseGuidance';
@@ -17,20 +20,15 @@ import { Exercise } from '../../types/models';
 import { MotionProvider } from '../../context/MotionContext';
 
 // Mock exercises data - in a real app this would come from an API or database
-const mockExercises: Exercise[] = [
+const exercises = (t: TFunction): Exercise[] => [
   {
     id: 'jumping-jacks',
-    name: 'Jumping Jacks',
-    description: 'A classic exercise that works your whole body while improving coordination.',
+    name: t('activities.exercises.jumpingJacks.title'),
+    description: t('activities.exercises.jumpingJacks.description'),
     difficulty: 'beginner',
     minAge: 5,
     maxAge: 12,
-    instructions: [
-      'Start by standing with your feet together and arms at your sides.',
-      'Jump and spread your legs while raising your arms above your head.',
-      'Jump again and return to the starting position.',
-      'Repeat for 10-15 repetitions.'
-    ],
+    instructions: t('activities.exercises.jumpingJacks.instructions', { returnObjects: true }) as string[],
     imageUrl: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     motionKeypoints: [
       {
@@ -47,21 +45,14 @@ const mockExercises: Exercise[] = [
       'Great job, keep going!',
       'Remember to fully extend your arms each time!'
     ]
-  },
-  {
+  },  {
     id: 'squats',
-    name: 'Squats',
-    description: 'Builds lower body strength and stability.',
+    name: t('activities.exercises.squats.title'),
+    description: t('activities.exercises.squats.description'),
     difficulty: 'intermediate',
     minAge: 6,
     maxAge: 12,
-    instructions: [
-      'Stand with your feet shoulder-width apart.',
-      'Lower your body as if sitting in an invisible chair.',
-      'Keep your chest up and knees behind your toes.',
-      'Push through your heels to stand back up.',
-      'Repeat for 8-12 repetitions.'
-    ],
+    instructions: t('activities.exercises.squats.instructions', { returnObjects: true }) as string[],
     imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
     motionKeypoints: [
       {
@@ -72,18 +63,15 @@ const mockExercises: Exercise[] = [
         ],
         toleranceRange: 0.2
       }
-    ],
-    voicePrompts: [
-      'Squat down slowly!',
-      'Keep your back straight!',
-      'Push through your heels to stand up!'
-    ]
+    ],    voicePrompts: t('activities.exercises.squats.voicePrompts', { returnObjects: true }) as string[]
   }
 ];
 
 const ExerciseDetailPage: React.FC = () => {
   const { exerciseId } = useParams<{ exerciseId: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const [exercise, setExercise] = useState<Exercise | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   
@@ -95,7 +83,7 @@ const ExerciseDetailPage: React.FC = () => {
         // In a real app, this would be an API call
         await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
         
-        const foundExercise = mockExercises.find(ex => ex.id === exerciseId);
+        const foundExercise = exercises(t).find(ex => ex.id === exerciseId);
         
         if (foundExercise) {
           setExercise(foundExercise);
@@ -125,10 +113,9 @@ const ExerciseDetailPage: React.FC = () => {
   
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>
-        <CircularProgress />
+      <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>        <CircularProgress />
         <Typography variant="body1" sx={{ mt: 2 }}>
-          Loading exercise details...
+          {t('common.loading')}
         </Typography>
       </Container>
     );
@@ -137,16 +124,15 @@ const ExerciseDetailPage: React.FC = () => {
   if (!exercise) {
     return (
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Paper elevation={3} sx={{ p: 3 }}>
-          <Typography variant="h5" color="error">
-            Exercise not found
+        <Paper elevation={3} sx={{ p: 3 }}>          <Typography variant="h5" color="error">
+            {t('activities.exerciseNotFound')}
           </Typography>
           <Button 
             variant="contained" 
             onClick={() => navigate('/exercises')}
             sx={{ mt: 2 }}
           >
-            Back to Exercises
+            {t('common.backToExercises')}
           </Button>
         </Paper>
       </Container>
@@ -155,13 +141,12 @@ const ExerciseDetailPage: React.FC = () => {
   
   return (
     <MotionProvider>
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
-        <Button 
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>        <Button 
           variant="outlined" 
           onClick={() => navigate(-1)}
-          sx={{ mb: 3 }}
+          sx={{ mb: 3, mr: isRTL ? 'auto' : 0, ml: isRTL ? 0 : 'auto' }}
         >
-          Back
+          {t('common.back')}
         </Button>
         
         <Grid container spacing={3}>

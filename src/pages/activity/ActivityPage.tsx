@@ -45,52 +45,31 @@ const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
     id: 'freestyle',
     name: t('activities.freestyle.title'),
     description: t('activities.freestyle.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,
-    instructions: isRTL 
-      ? [
-          'נוע בחופשיות מול המצלמה',
-          'נסה תנועות שונות כדי לצבור נקודות',
-          'תהנה ותהיה פעיל!'
-        ] 
-      : [
-          'Move around freely in front of the camera',
-          'Try different movements to earn points',
-          'Have fun and be active!'
-        ]
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,    instructions: [
+      t('activities.freestyle.step1'),
+      t('activities.freestyle.step2'),
+      t('activities.freestyle.step3')
+    ]
   },
   {
     id: 'dance',
     name: t('activities.dance.title'),
     description: t('activities.dance.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
-    instructions: isRTL 
-      ? [
-          'רקדו למוזיקה האהובה עליכם',
-          'השתמשו בכל הגוף',
-          'שמרו על הקצב ותהנו!'
-        ] 
-      : [
-          'Dance to your favorite music',
-          'Try to use your whole body',
-          'Keep the rhythm and have fun!'
-        ]
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,    instructions: [
+      t('activities.dance.step1'),
+      t('activities.dance.step2'),
+      t('activities.dance.step3')
+    ]
   },
   {
     id: 'sports',
     name: t('activities.sports.title'),
     description: t('activities.sports.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,
-    instructions: isRTL 
-      ? [
-          'בחרו את תנועת הספורט האהובה עליכם',
-          'תרגלו את התנועה מול המצלמה',
-          'קבלו משוב על הצורה שלכם'
-        ] 
-      : [
-          'Choose your favorite sport movement',
-          'Practice the movement in front of the camera',
-          'Get feedback on your form'
-        ]
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,    instructions: [
+      t('activities.sports.step1'),
+      t('activities.sports.step2'),
+      t('activities.sports.step3')
+    ]
   }
 ];
 

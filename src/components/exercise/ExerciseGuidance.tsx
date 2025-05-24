@@ -202,24 +202,22 @@ const ExerciseGuidance: React.FC<ExerciseGuidanceProps> = ({
             </StepContent>
           </Step>
         ))}
-      </Stepper>
-        {/* Completion message */}
+      </Stepper>      {/* Completion message */}
       {isCompleted && (
         <Box sx={{ p: 3, bgcolor: 'success.light', borderRadius: 1, color: 'white' }}>
           <Typography variant="h6" align={isRTL ? 'right' : 'left'}>
-            {isRTL ? 'כל הכבוד! התרגיל הושלם!' : 'Great job! Exercise completed!'}
+            {t('motion.greatJob')}
           </Typography>
           <Typography variant="body2" align={isRTL ? 'right' : 'left'}>
-            {isRTL ? 'צברת נקודות עבור השלמת התרגיל הזה.' : 'You\'ve earned points for completing this exercise.'}
+            {t('motion.pointsEarned')}
           </Typography>
         </Box>
       )}
-      
-      {/* Tracking status warning */}
+        {/* Tracking status warning */}
       {!isTracking && (
         <Box sx={{ p: 2, bgcolor: 'warning.light', borderRadius: 1, mt: 2 }}>
-          <Typography variant="body2">
-            <strong>Note:</strong> Motion tracking is not active. Enable tracking for form analysis.
+          <Typography variant="body2" align={isRTL ? 'right' : 'left'}>
+            {t('motion.trackingNotActive')}
           </Typography>
         </Box>
       )}
