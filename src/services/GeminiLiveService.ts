@@ -64,38 +64,45 @@ export class GeminiLiveService {
     if (!recorder) {
       recorder = new MediaRecorder(stream);
     }
-    let hasSentFirstChunk = false;
+    // Workaround: force MediaRecorder to emit data by calling requestData() on start
+    recorder.onstart = () => {
+      // Immediately request data to avoid empty first chunk
+      try {
+        recorder!.requestData();
+      } catch {}
+    };
     recorder.ondataavailable = async (event) => {
-      if (event.data && event.data.size > 0) {
-        hasSentFirstChunk = true;
+      // If the chunk is empty, request data again and return
+      if (!event.data || event.data.size === 0) {
         try {
-          const reader = new FileReader();
-          reader.onload = async () => {
-            const base64Video = (reader.result as string).split(',')[1];
-            const response = await fetch('http://localhost:5001/analyze_frame', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ image_data: base64Video }),
-            });
-            if (!response.ok) {
-              if (onError) onError('Backend API error');
-              return;
-            }
-            const data = await response.json();
-            onFeedback({
-              activityType: data.activityType || '',
-              feedback: data.feedback || ''
-            });
-          };
-          reader.readAsDataURL(event.data);
-        } catch (e) {
-          if (onError) onError('Failed to analyze stream chunk');
-        }
-      } else if (!hasSentFirstChunk) {
-        // If the first chunk is empty, ignore and wait for the next
+          if (recorder) recorder.requestData();
+        } catch {}
         return;
+      }
+      try {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const base64Video = (reader.result as string).split(',')[1];
+          const response = await fetch('http://localhost:5001/analyze_frame', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image_data: base64Video }),
+          });
+          if (!response.ok) {
+            if (onError) onError('Backend API error');
+            return;
+          }
+          const data = await response.json();
+          onFeedback({
+            activityType: data.activityType || '',
+            feedback: data.feedback || ''
+          });
+        };
+        reader.readAsDataURL(event.data);
+      } catch (e) {
+        if (onError) onError('Failed to analyze stream chunk');
       }
     };
     if (recorder && recorder.state === 'inactive') {
