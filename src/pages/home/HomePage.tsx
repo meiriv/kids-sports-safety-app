@@ -200,26 +200,25 @@ const HomePage: React.FC = () => {
       duration: isRTL ? '8 דקות' : '8 minutes',
       points: 95
     }
-  ];
-    const recommendedExercises = [    {
-      id: 'jumping-jacks',
-      title: isRTL ? t('activities.exercises.jumpingJacks.title') : 'Jumping Jacks',
+  ];    const recommendedExercises = [    {
+      id: 'resistance',
+      title: isRTL ? t('activities.resistance.title', 'פעילויות גומי') : 'Ring/Rubber Band Activities',
       difficulty: 'beginner',
       ageRange: '5-12',
-      imageUrl: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
+      imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/resistance.png`
     },    {
-      id: 'squats',
-      title: isRTL ? t('activities.exercises.squats.title') : 'Squats',
-      difficulty: 'intermediate',
-      ageRange: '6-12',
-      imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
+      id: 'dance',
+      title: isRTL ? t('activities.dance.title', 'ריקוד') : 'Dance',
+      difficulty: 'beginner',
+      ageRange: '5-12',
+      imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.jpeg`
     },
     {
-      id: 'arm-circles',
-      title: isRTL ? t('activities.exercises.armCircles.title', 'Arm Circles') : 'Arm Circles',
-      difficulty: 'beginner',
-      ageRange: '5-10',
-      imageUrl: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=140&q=80'
+      id: 'weightlifting',
+      title: isRTL ? t('activities.weightlifting.title', 'הרמת משקולות') : 'Weightlifting',
+      difficulty: 'intermediate',
+      ageRange: '8-12',
+      imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/weightlifting.png`
     }
   ];
   
