@@ -3,11 +3,13 @@ export interface User {
   displayName: string;
   email: string;
   avatarUrl?: string;
+  photoURL?: string;
   age?: number;
   parentIds?: string[];
   friendIds?: string[];
   createdAt: Date;
   lastLogin: Date;
+  provider?: 'email' | 'google' | 'facebook' | 'apple';
 }
 
 export interface Parent {

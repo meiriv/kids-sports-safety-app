@@ -11,10 +11,17 @@ import {
   Tab,
   Alert,
   Grid,
-  Link as MuiLink
+  Link as MuiLink,
+  Divider
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+import { getGoogleClientId } from '../../utils/config';
+
+// Get Google Client ID from environment variables
+const GOOGLE_CLIENT_ID = getGoogleClientId();
 
 const AuthPage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -23,8 +30,7 @@ const AuthPage: React.FC = () => {
   const [displayName, setDisplayName] = useState<string>('');
   const [forgotPassword, setForgotPassword] = useState<boolean>(false);
   const [resetEmailSent, setResetEmailSent] = useState<boolean>(false);
-  
-  const { login, register, resetPassword, loading, error } = useAuth();
+    const { login, register, resetPassword, loginWithGoogle, loading, error } = useAuth();
   const navigate = useNavigate();
   
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -57,8 +63,7 @@ const AuthPage: React.FC = () => {
       console.error('Registration error:', err);
     }
   };
-  
-  const handleResetPassword = async (e: React.FormEvent) => {
+    const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
@@ -69,15 +74,24 @@ const AuthPage: React.FC = () => {
     }
   };
   
-  return (
-    <Container maxWidth="sm" sx={{ mt: 8, mb: 8 }}>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          p: 4, 
-          borderRadius: 3,
-          background: 'linear-gradient(to bottom right, #ffffff, #f5f5f5)'
-        }}
+  const handleGoogleSignIn = async () => {
+    try {
+      await loginWithGoogle();
+      navigate('/');
+    } catch (err) {
+      console.error('Google sign-in error:', err);
+    }
+  };
+    return (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <Container maxWidth="sm" sx={{ mt: 8, mb: 8 }}>
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            p: 4, 
+            borderRadius: 3,
+            background: 'linear-gradient(to bottom right, #ffffff, #f5f5f5)'
+          }}
       >
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Typography 
@@ -148,8 +162,7 @@ const AuthPage: React.FC = () => {
                     Forgot password?
                   </MuiLink>
                 </Box>
-                
-                <Button
+                  <Button
                   type="submit"
                   variant="contained"
                   fullWidth
@@ -158,6 +171,41 @@ const AuthPage: React.FC = () => {
                   disabled={loading}
                 >
                   {loading ? <CircularProgress size={24} /> : 'Sign In'}
+                </Button>
+                
+                <Box sx={{ position: 'relative', my: 3 }}>
+                  <Divider sx={{ my: 2 }}>
+                    <Typography variant="body2" color="textSecondary">
+                      OR
+                    </Typography>
+                  </Divider>
+                </Box>
+                  <Button
+                  fullWidth
+                  variant="outlined"
+                  size="large"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  sx={{ 
+                    mb: 2, 
+                    py: 1.5, 
+                    borderRadius: 2, 
+                    borderColor: '#4285F4',
+                    color: '#4285F4',
+                    '&:hover': {
+                      borderColor: '#4285F4',
+                      backgroundColor: 'rgba(66, 133, 244, 0.04)',
+                    }
+                  }}
+                  startIcon={
+                    <img 
+                      src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" 
+                      alt="Google logo" 
+                      style={{ width: 18, height: 18 }}
+                    />
+                  }
+                >
+                  Sign in with Google
                 </Button>
               </form>
             ) : (
@@ -192,8 +240,7 @@ const AuthPage: React.FC = () => {
                   disabled={loading}
                   helperText="Password must be at least 8 characters"
                 />
-                
-                <Button
+                  <Button
                   type="submit"
                   variant="contained"
                   fullWidth
@@ -202,6 +249,41 @@ const AuthPage: React.FC = () => {
                   disabled={loading}
                 >
                   {loading ? <CircularProgress size={24} /> : 'Register'}
+                </Button>
+                
+                <Box sx={{ position: 'relative', my: 3 }}>
+                  <Divider sx={{ my: 2 }}>
+                    <Typography variant="body2" color="textSecondary">
+                      OR
+                    </Typography>
+                  </Divider>
+                </Box>
+                  <Button
+                  fullWidth
+                  variant="outlined"
+                  size="large"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  sx={{ 
+                    mb: 2, 
+                    py: 1.5, 
+                    borderRadius: 2, 
+                    borderColor: '#4285F4',
+                    color: '#4285F4',
+                    '&:hover': {
+                      borderColor: '#4285F4',
+                      backgroundColor: 'rgba(66, 133, 244, 0.04)',
+                    }
+                  }}
+                  startIcon={
+                    <img 
+                      src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" 
+                      alt="Google logo" 
+                      style={{ width: 18, height: 18 }}
+                    />
+                  }
+                >
+                  Sign up with Google
                 </Button>
                 
                 <Typography variant="body2" color="textSecondary" align="center">
@@ -311,9 +393,9 @@ const AuthPage: React.FC = () => {
           >
             Help & Support
           </MuiLink>
-        </Grid>
-      </Grid>
+        </Grid>      </Grid>
     </Container>
+    </GoogleOAuthProvider>
   );
 };
 

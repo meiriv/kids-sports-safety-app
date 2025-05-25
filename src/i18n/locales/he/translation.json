@@ -23,6 +23,20 @@
   },  "activities": {
     "title": "בחר פעילות",
     "exerciseNotFound": "התרגיל לא נמצא",
+    "activitySelection": {
+      "title": "בחר סוג פעילות",
+      "subtitle": "בחרו את הפעילות האהובה עליכם והתחילו להקליט עם המצלמה",
+      "benefits": {
+        "title": "יתרונות",
+        "haveFun": "תהנו תוך כדי פעילות גופנית",
+        "earnPoints": "צברו נקודות והישגים",
+        "trackProgress": "עקבו אחר ההתקדמות שלכם"
+      },
+      "level": "רמה",
+      "duration": "משך זמן",
+      "earn": "נקודות לצבירה",
+      "allLevels": "כל הרמות"
+    },
     "exercises": {      "squats": {
         "title": "שפיפות",
         "description": "תרגיל לחיזוק רגליים וליציבה טובה",

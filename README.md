@@ -9,11 +9,16 @@ A React application designed to help kids stay active and safe while having fun 
 - **Gamification**: Points system and achievements to motivate kids to stay active
 - **Real-time Feedback**: Visual feedback on activity intensity and performance
 - **Kid-friendly Interface**: Colorful, engaging design specifically for children
+- **User Authentication**: Support for both email/password and Google authentication
+- **Profile Management**: User profiles with customizable settings and achievements
 
 ## Quick start:
     1. git clone https://github.com/meiriv/kids-sports-safety-app.git
     2. npm install
-    3. npm start
+    3. Copy .env.example to .env.local and set your Google OAuth credentials
+    4. npm start
+    
+For detailed instructions on setting up Google authentication, see [GOOGLE_AUTH_SETUP.md](GOOGLE_AUTH_SETUP.md)
 ## Available Scripts
 
 In the project directory, you can run:
