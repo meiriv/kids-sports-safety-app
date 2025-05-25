@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="60" cy="60" r="15" fill="#FF8C00" />
+  <rect x="55" y="75" width="10" height="35" fill="#FF8C00" />
+  <line x1="55" y1="85" x2="40" y2="105" stroke="#FF8C00" stroke-width="6" />
+  <line x1="65" y1="85" x2="80" y2="105" stroke="#FF8C00" stroke-width="6" />
+  <line x1="55" y1="110" x2="45" y2="130" stroke="#FF8C00" stroke-width="6" />
+  <line x1="65" y1="110" x2="75" y2="130" stroke="#FF8C00" stroke-width="6" />
+  
+  <circle cx="140" cy="60" r="15" fill="#FF8C00" />
+  <rect x="135" y="75" width="10" height="35" fill="#FF8C00" />
+  <line x1="135" y1="85" x2="120" y2="105" stroke="#FF8C00" stroke-width="6" />
+  <line x1="145" y1="85" x2="160" y2="105" stroke="#FF8C00" stroke-width="6" />
+  <line x1="135" y1="110" x2="125" y2="130" stroke="#FF8C00" stroke-width="6" />
+  <line x1="145" y1="110" x2="155" y2="130" stroke="#FF8C00" stroke-width="6" />
+  
+  <rect x="90" y="40" width="20" height="20" rx="5" fill="#FF8C00" />
+  <rect x="95" y="60" width="10" height="100" fill="#FF8C00" />
+  
+  <text x="100" y="180" text-anchor="middle" font-size="14" font-family="Arial" fill="#FF8C00">Jumprope</text>
+</svg>

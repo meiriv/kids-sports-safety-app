@@ -9,37 +9,162 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia
+  CardMedia,
+  InputBase,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 import { useLanguage } from '../../context/LanguageContext';
 
-// Available activity types with improved descriptions and kid-friendly details
-const activityTypes = [  {    id: 'freestyle',
-    name: 'Freestyle Play',
-    description: 'Move freely - run, jump, hop, and have tons of fun!',
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,
-    level: 'All levels',
-    duration: '5-15 min',
+// Available activity types with translations
+const getActivityTypes = (t: TFunction, isRTL: boolean) => [  {
+    id: 'freestyle',
+    name: t('activities.freestyle.title'),
+    description: t('activities.freestyle.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'כל הרמות' : 'All levels',
+    duration: isRTL ? '5-15 דק\'' : '5-15 min',
     pointsEstimate: '50-150',
     emoji: '🏃‍♂️',
-  },{    id: 'dance',
-    name: 'Dance Party',
-    description: 'Show off your coolest dance moves and grooves!',
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
-    level: 'All levels',
-    duration: '5-15 min',
+  },
+  {
+    id: 'dance',
+    name: t('activities.dance.title'),
+    description: t('activities.dance.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'כל הרמות' : 'All levels',
+    duration: isRTL ? '5-15 דק\'' : '5-15 min',
     pointsEstimate: '50-200',
     emoji: '💃',
-  },  {    id: 'sports',
-    name: 'Sports Practice',
-    description: 'Practice your favorite sports skills and movements',
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,
-    level: 'All levels',
-    duration: '5-15 min',
+  },
+  {    id: 'sports',
+    name: t('activities.sports.title'),
+    description: t('activities.sports.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1576858574144-9ae1ebcf5ae5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'כל הרמות' : 'All levels',
+    duration: isRTL ? '5-15 דק\'' : '5-15 min',
     pointsEstimate: '50-150',
     emoji: '⚽',
+  },  {
+    id: 'stretching',
+    name: t('activities.stretching.title'),
+    description: t('activities.stretching.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'כל הרמות' : 'All levels',
+    duration: isRTL ? '10-15 דק\'' : '10-15 min',
+    pointsEstimate: '30-60',
+    emoji: '🧘‍♂️',
+  },
+  {    id: 'pushups',
+    name: t('activities.pushups.title'),
+    description: t('activities.pushups.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'בינוני' : 'Intermediate',
+    duration: isRTL ? '5-10 דק\'' : '5-10 min',
+    pointsEstimate: '40-100',
+    emoji: '💪',
+  },
+  {
+    id: 'jumpingjacks',
+    name: t('activities.jumpingjacks.title'),
+    description: t('activities.jumpingjacks.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'מתחיל' : 'Beginner',
+    duration: isRTL ? '5-10 דק\'' : '5-10 min',
+    pointsEstimate: '40-80',
+    emoji: '⭐',
+  },  {
+    id: 'plank',
+    name: t('activities.plank.title'),
+    description: t('activities.plank.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'בינוני' : 'Intermediate',
+    duration: isRTL ? '3-6 דק\'' : '3-6 min',
+    pointsEstimate: '30-70',
+    emoji: '🏋️‍♀️',
+  },  {    id: 'resistance',
+    name: t('activities.resistance.title'),
+    description: t('activities.resistance.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1607962837359-5e7e89f86776?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'כל הרמות' : 'All levels',
+    duration: isRTL ? '10-15 דק\'' : '10-15 min',
+    pointsEstimate: '40-100',
+    emoji: '🔄',
+  },
+  {
+    id: 'squats',
+    name: t('activities.squats.title'),
+    description: t('activities.squats.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'מתחיל' : 'Beginner',
+    duration: isRTL ? '5-10 דק\'' : '5-10 min',
+    pointsEstimate: '30-70',
+    emoji: '🦵',
+  },  {
+    id: 'yoga',
+    name: t('activities.yoga.title'),
+    description: t('activities.yoga.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'כל הרמות' : 'All levels',
+    duration: isRTL ? '10-30 דק\'' : '10-30 min',
+    pointsEstimate: '50-150',
+    emoji: '🧘',
+  },  {    id: 'crunches',
+    name: t('activities.crunches.title'),
+    description: t('activities.crunches.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'בינוני' : 'Intermediate',
+    duration: isRTL ? '5-10 דק\'' : '5-10 min',
+    pointsEstimate: '30-80',
+    emoji: '🦸‍♂️',
+  },  {
+    id: 'jumprope',
+    name: t('activities.jumprope.title'),
+    description: t('activities.jumprope.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'מתחיל' : 'Beginner',
+    duration: isRTL ? '5-15 דק\'' : '5-15 min',
+    pointsEstimate: '50-120',
+    emoji: '⏱️',
+  },  {    id: 'boxing',
+    name: t('activities.boxing.title'),
+    description: t('activities.boxing.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1517438476312-10d79c077509?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'בינוני' : 'Intermediate',
+    duration: isRTL ? '10-20 דק\'' : '10-20 min',
+    pointsEstimate: '60-150',
+    emoji: '🥊',
+  },  {
+    id: 'stepups',
+    name: t('activities.stepups.title'),
+    description: t('activities.stepups.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'מתחיל' : 'Beginner',
+    duration: isRTL ? '5-15 דק\'' : '5-15 min',
+    pointsEstimate: '30-90',
+    emoji: '🪜',
+  },  {
+    id: 'weightlifting',
+    name: t('activities.weightlifting.title'),
+    description: t('activities.weightlifting.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'מתקדם' : 'Advanced',
+    duration: isRTL ? '15-30 דק\'' : '15-30 min',
+    pointsEstimate: '70-180',
+    emoji: '🏋️',
+  },  {    id: 'handstands',
+    name: t('activities.handstands.title'),
+    description: t('activities.handstands.description'),
+    imageUrl: 'https://images.unsplash.com/photo-1593164842264-854604db2260?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    level: isRTL ? 'מתקדם' : 'Advanced',
+    duration: isRTL ? '5-10 דק\'' : '5-10 min',
+    pointsEstimate: '50-100',
+    emoji: '🤸‍♂️',
   }
 ];
 
@@ -47,12 +172,32 @@ const ActivitySelectionPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
-
+  const allActivityTypes = getActivityTypes(t, isRTL);
+  
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [difficultyFilter, setDifficultyFilter] = React.useState('all');
+  
+  // Filter activities based on search and difficulty filter
+  const activityTypes = React.useMemo(() => {
+    return allActivityTypes.filter(activity => {
+      const matchesSearch = searchTerm === '' || 
+        activity.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        activity.description.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesDifficulty = difficultyFilter === 'all' || 
+        activity.level.toLowerCase().includes(difficultyFilter.toLowerCase());
+      
+      return matchesSearch && matchesDifficulty;
+    });
+  }, [allActivityTypes, searchTerm, difficultyFilter]);
+  
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>      <Button
         variant="outlined"
         onClick={() => navigate('/')}
         sx={{ mb: 3 }}
+        startIcon={!isRTL && <Box component="span">←</Box>}
+        endIcon={isRTL && <Box component="span">→</Box>}
       >
         {t('buttons.back')}
       </Button><Paper 
@@ -95,13 +240,13 @@ const ActivitySelectionPage: React.FC = () => {
         
         <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} sm={7}>
-            <Box sx={{ position: 'relative', zIndex: 2 }}>
-              <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Let's Get Moving! 🎮
+            <Box sx={{ position: 'relative', zIndex: 2 }}>          <Typography variant="h4" fontWeight="bold" gutterBottom align={isRTL ? 'right' : 'left'}>
+                {isRTL ? 'בואו נתחיל לזוז! 🎮' : 'Let\'s Get Moving! 🎮'}
               </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                Choose your favorite activity and start recording with the camera.
-                Jump, dance, and play to earn exciting points and rewards!
+              <Typography variant="body1" sx={{ mb: 2 }} align={isRTL ? 'right' : 'left'}>
+                {isRTL 
+                  ? 'בחרו את הפעילות האהובה עליכם והתחילו להקליט עם המצלמה. קפצו, רקדו ושחקו כדי להרוויח נקודות ופרסים מרגשים!'
+                  : 'Choose your favorite activity and start recording with the camera. Jump, dance, and play to earn exciting points and rewards!'}
               </Typography>
               <Box sx={{ 
                 display: 'flex', 
@@ -123,57 +268,140 @@ const ActivitySelectionPage: React.FC = () => {
               p: 2,
               position: 'relative',
               zIndex: 2
-            }}>
-              <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
-                Benefits:
+            }}>              <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }} align={isRTL ? 'right' : 'left'}>
+                {isRTL ? 'יתרונות:' : 'Benefits:'}
               </Typography>
-              <Typography variant="body2" sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-                <Box component="span" sx={{ mr: 1, fontSize: '18px' }}>✅</Box>
-                Have fun while staying active
+              <Typography variant="body2" sx={{ 
+                mb: 1, 
+                display: 'flex', 
+                alignItems: 'center',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }} align={isRTL ? 'right' : 'left'}>
+                <Box component="span" sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0, fontSize: '18px' }}>✅</Box>
+                {isRTL ? 'תהנו תוך כדי פעילות גופנית' : 'Have fun while staying active'}
               </Typography>
-              <Typography variant="body2" sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-                <Box component="span" sx={{ mr: 1, fontSize: '18px' }}>✅</Box>
-                Earn points and achievements
+              <Typography variant="body2" sx={{ 
+                mb: 1, 
+                display: 'flex', 
+                alignItems: 'center',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }} align={isRTL ? 'right' : 'left'}>
+                <Box component="span" sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0, fontSize: '18px' }}>✅</Box>
+                {isRTL ? 'צברו נקודות והישגים' : 'Earn points and achievements'}
               </Typography>
-              <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box component="span" sx={{ mr: 1, fontSize: '18px' }}>✅</Box>
-                Track your progress and skills
+              <Typography variant="body2" sx={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }} align={isRTL ? 'right' : 'left'}>
+                <Box component="span" sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0, fontSize: '18px' }}>✅</Box>
+                {isRTL ? 'עקבו אחר ההתקדמות והמיומנויות שלכם' : 'Track your progress and skills'}
               </Typography>
             </Box>
           </Grid>
         </Grid>
-      </Paper>
-      
-      <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
-        Select Activity Type:
-      </Typography>
-      
-      <Grid container spacing={3}>
-        {activityTypes.map(activity => (
-          <Grid item xs={12} sm={6} md={4} key={activity.id}>
-            <Card sx={{ 
-              height: '100%', 
-              borderRadius: 3, 
-              overflow: 'hidden', 
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.03)' }
-            }}>
-              <CardActionArea 
-                onClick={() => navigate(`/activities/${activity.id}`)}
-                sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
-              >
+      </Paper>        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h5" fontWeight="bold" sx={{ textAlign: isRTL ? 'right' : 'left' }}>
+            {isRTL ? 'בחרו סוג פעילות:' : 'Select Activity Type:'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {isRTL 
+              ? `${activityTypes.length} מתוך ${allActivityTypes.length} פעילויות זמינות` 
+              : `${activityTypes.length} of ${allActivityTypes.length} activities available`}
+          </Typography>
+        </Box>
+        
+        {/* Search and Filter */}
+        <Paper 
+          elevation={1} 
+          sx={{ 
+            p: 2, 
+            mb: 3, 
+            borderRadius: 2, 
+            display: 'flex', 
+            flexDirection: { xs: 'column', sm: 'row' }, 
+            gap: 2,
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Box 
+            component="input"
+            placeholder={isRTL ? "חפשו פעילות..." : "Search activities..."}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{
+              border: '1px solid #ddd',
+              borderRadius: 1,
+              p: 1.5,
+              width: { xs: '100%', sm: '60%' },
+              fontSize: '1rem',
+              textAlign: isRTL ? 'right' : 'left',
+              direction: isRTL ? 'rtl' : 'ltr',
+              '&:focus': {
+                outline: 'none',
+                borderColor: 'primary.main'
+              }
+            }}
+          />
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="body2" color="text.secondary">
+              {isRTL ? 'סנן לפי רמה:' : 'Filter by level:'}
+            </Typography>
+            
+            <Box 
+              component="select"
+              value={difficultyFilter}
+              onChange={(e) => setDifficultyFilter(e.target.value)}
+              sx={{
+                border: '1px solid #ddd',
+                borderRadius: 1,
+                p: 1.5,
+                fontSize: '0.9rem',
+                textAlign: isRTL ? 'right' : 'left',
+                direction: isRTL ? 'rtl' : 'ltr'
+              }}
+            >
+              <Box component="option" value="all">{isRTL ? 'כל הרמות' : 'All Levels'}</Box>
+              <Box component="option" value="beginner">{isRTL ? 'מתחיל' : 'Beginner'}</Box>
+              <Box component="option" value="intermediate">{isRTL ? 'בינוני' : 'Intermediate'}</Box>
+              <Box component="option" value="advanced">{isRTL ? 'מתקדם' : 'Advanced'}</Box>
+            </Box>
+          </Box>
+        </Paper>      {activityTypes.length > 0 ? (
+        <Grid container spacing={2}>
+          {activityTypes.map(activity => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={activity.id}>
+              <Card sx={{ 
+                height: '100%', 
+                borderRadius: 3, 
+                overflow: 'hidden', 
+                transition: 'transform 0.2s',
+                '&:hover': { transform: 'scale(1.03)' }
+              }}>
+                <CardActionArea 
+                  onClick={() => navigate(`/activities/${activity.id}`)}
+                  sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
+                >
                 <CardMedia
                   component="img"
                   height="180"
                   image={activity.imageUrl}
                   alt={activity.name}
                 />                <CardContent sx={{ flexGrow: 1 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    mb: 1,
+                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                  }}>
                     <Typography 
                       variant="h5" 
                       component="div" 
                       fontWeight="bold"
-                      sx={{ mr: 1 }}
+                      sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0 }}
+                      align={isRTL ? 'right' : 'left'}
                     >
                       {activity.name}
                     </Typography>
@@ -182,11 +410,15 @@ const ActivitySelectionPage: React.FC = () => {
                     </Typography>
                   </Box>
                   
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary" 
+                    sx={{ mb: 2 }}
+                    align={isRTL ? 'right' : 'left'}
+                  >
                     {activity.description}
                   </Typography>
-                  
-                  <Grid container spacing={1} sx={{ mb: 1 }}>
+                    <Grid container spacing={1} sx={{ mb: 1, flexDirection: isRTL ? 'row-reverse' : 'row' }}>
                     <Grid item>
                       <Box 
                         sx={{ 
@@ -220,8 +452,7 @@ const ActivitySelectionPage: React.FC = () => {
                       </Box>
                     </Grid>
                   </Grid>
-                  
-                  <Box sx={{ 
+                    <Box sx={{ 
                     display: 'flex', 
                     alignItems: 'center', 
                     mt: 1.5,
@@ -229,21 +460,55 @@ const ActivitySelectionPage: React.FC = () => {
                     color: 'white',
                     py: 0.7,
                     px: 2,
-                    borderRadius: 2
+                    borderRadius: 2,
+                    flexDirection: isRTL ? 'row-reverse' : 'row'
                   }}>
-                    <Typography variant="body2" sx={{ mr: 1 }}>
-                      Earn:
+                    <Typography variant="body2" sx={{ mr: isRTL ? 0 : 1, ml: isRTL ? 1 : 0 }}>
+                      {isRTL ? 'נקודות לצבירה:' : 'Earn:'}
                     </Typography>
                     <Typography variant="body2" fontWeight="bold">
-                      {activity.pointsEstimate} points
+                      {isRTL 
+                        ? `${activity.pointsEstimate} נקודות`
+                        : `${activity.pointsEstimate} points`
+                      }
                     </Typography>
                   </Box>
                 </CardContent>
               </CardActionArea>
             </Card>
           </Grid>
-        ))}
-      </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Paper 
+          elevation={1} 
+          sx={{ 
+            p: 4, 
+            borderRadius: 2, 
+            textAlign: 'center',
+            backgroundColor: 'rgba(0,0,0,0.02)'
+          }}
+        >
+          <Typography variant="h6" color="text.secondary" gutterBottom>
+            {isRTL ? 'לא נמצאו פעילויות התואמות לחיפוש שלך' : 'No activities match your search'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {isRTL 
+              ? 'נסו לשנות את מונחי החיפוש או את פילטר הרמה' 
+              : 'Try changing your search terms or level filter'}
+          </Typography>
+          <Button 
+            variant="outlined" 
+            sx={{ mt: 2 }}
+            onClick={() => {
+              setSearchTerm('');
+              setDifficultyFilter('all');
+            }}
+          >
+            {isRTL ? 'נקה פילטרים' : 'Clear filters'}
+          </Button>
+        </Paper>
+      )}
     </Container>
   );
 };

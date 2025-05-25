@@ -111,10 +111,9 @@ const Layout: React.FC = () => {
               <IconButton 
                 onClick={handleProfileMenuOpen}
                 sx={{ p: 0, ml: 2 }}
-              >
-                <Avatar 
+              >                <Avatar 
                   alt={currentUser.displayName} 
-                  src={currentUser.avatarUrl || '/avatar-placeholder.png'}
+                  src={currentUser.photoURL || currentUser.avatarUrl || '/avatar-placeholder.png'}
                 />
               </IconButton>
               <Menu
@@ -163,15 +162,18 @@ const Layout: React.FC = () => {
         <Toolbar />
         <Box sx={{ overflow: 'auto', mt: 2 }}>
           {currentUser && (
-            <Box sx={{ px: 2, py: 2, textAlign: 'center' }}>
-              <Avatar
+            <Box sx={{ px: 2, py: 2, textAlign: 'center' }}>              <Avatar
                 alt={currentUser.displayName}
-                src={currentUser.avatarUrl || '/avatar-placeholder.png'}
+                src={currentUser.photoURL || currentUser.avatarUrl || '/avatar-placeholder.png'}
                 sx={{ width: 64, height: 64, mx: 'auto', mb: 1 }}
-              />
-              <Typography variant="subtitle1" fontWeight="bold">
+              />              <Typography variant="subtitle1" fontWeight="bold">
                 {currentUser.displayName}
               </Typography>
+              {currentUser.provider && (
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                  {currentUser.provider === 'google' ? 'Google Account' : 'Email Account'}
+                </Typography>
+              )}
               <Box sx={{ 
                 bgcolor: 'primary.main', 
                 color: 'white', 

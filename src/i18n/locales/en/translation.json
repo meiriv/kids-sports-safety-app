@@ -15,9 +15,34 @@
     "viewAll": "View All",
     "achievements": "Your Achievements",
     "stats": "Activity Stats"
-  },
-  "activities": {
-    "title": "Choose an Activity",
+  },  "activities": {
+    "title": "Choose an Activity",    "activitySelection": {
+      "title": "Select Activity Type",
+      "subtitle": "Choose your favorite activity and start recording with the camera",
+      "benefits": {
+        "title": "Benefits",
+        "haveFun": "Have fun while staying active",
+        "earnPoints": "Earn points and achievements",
+        "trackProgress": "Track your progress and skills"
+      },
+      "level": "Level",
+      "duration": "Duration",
+      "earn": "Earn",
+      "allLevels": "All levels"
+    },
+    "start": "Start",
+    "stop": "Stop",
+    "feedback": "Activity Feedback",
+    "keepMoving": "Keep moving to earn more points!",
+    "greatJob": "Great job! We're detecting your movements.",
+    "instructions": "Instructions",
+    "step": "Step",
+    "next": "Next",
+    "back": "Back",
+    "completed": "Activity Completed!",
+    "awesomeJob": "Awesome job! You've earned {{points}} points for your activity.",
+    "achievement": "New Achievement: {{minutes}} minute(s) of activity!",
+    "returningHome": "Returning to home screen...",
     "freestyle": {
       "title": "Freestyle Play",
       "description": "Move freely - run, jump, hop, and have tons of fun!",
@@ -53,6 +78,128 @@
       "step1": "Choose your favorite sport movement",
       "step2": "Practice the movement in front of the camera",
       "step3": "Get feedback on your form"
+    },
+    "stretching": {
+      "title": "Stretching",
+      "description": "Improve your flexibility and prevent injuries with these stretches",
+      "instructions": [
+        "Follow the stretching poses shown on screen",
+        "Hold each stretch for 15-20 seconds",
+        "Remember to breathe deeply and relax into each stretch"
+      ]
+    },
+    "pushups": {
+      "title": "Push-ups",
+      "description": "Build upper body strength with this classic exercise",
+      "instructions": [
+        "Position your hands shoulder-width apart",
+        "Keep your body in a straight line",
+        "Lower yourself and push back up"
+      ]
+    },
+    "jumpingjacks": {
+      "title": "Jumping Jacks",
+      "description": "A fun aerobic exercise to get your heart pumping",
+      "instructions": [
+        "Stand with feet together and arms at your sides",
+        "Jump while spreading legs and raising arms",
+        "Jump back to starting position"
+      ]
+    },    "plank": {
+      "title": "Plank",
+      "description": "Build core strength and stability with this simple but effective exercise",
+      "instructions": [
+        "Start in a push-up position with arms straight and hands directly under shoulders",
+        "Keep your body in a straight line from head to heels",
+        "Engage your core muscles by pulling your belly button toward your spine",
+        "Look at a spot on the floor to keep your neck neutral",
+        "Hold the position for 20-30 seconds, gradually working up to longer times"
+      ]
+    },
+    "resistance": {
+      "title": "Resistance Band Workout",
+      "description": "Use resistance bands for a full-body workout",
+      "instructions": [
+        "Secure the band properly before starting",
+        "Perform exercises with controlled movements",
+        "Keep tension in the band throughout the exercise"
+      ]
+    },
+    "squats": {
+      "title": "Squats",
+      "description": "Build lower body strength with this fundamental exercise",
+      "instructions": [
+        "Stand with feet shoulder-width apart",
+        "Lower your body as if sitting in a chair",
+        "Rise back to starting position"
+      ]
+    },
+    "yoga": {
+      "title": "Yoga",
+      "description": "Improve flexibility, balance and mindfulness with yoga poses",
+      "instructions": [
+        "Find a quiet space where you can move freely",
+        "Start with a simple 'Mountain Pose' - stand tall with feet together, arms at sides",
+        "Try 'Tree Pose' - stand on one leg, place other foot on inner thigh",
+        "Move to 'Downward Dog' - hands and feet on floor forming an upside-down V",
+        "Focus on your breathing throughout the practice"
+      ]
+    },
+    "crunches": {
+      "title": "Crunches",
+      "description": "Strengthen your core with these abdominal exercises",
+      "instructions": [
+        "Lie on your back with knees bent",
+        "Engage your core as you lift your shoulders off the ground",
+        "Lower back down with control"
+      ]
+    },
+    "jumprope": {
+      "title": "Jump Rope",
+      "description": "Improve coordination and cardio with jump rope exercises",
+      "instructions": [
+        "Hold rope handles with a relaxed grip and stand with feet together",
+        "Position the rope behind you, then swing it overhead and jump as it reaches your feet",
+        "Start with basic jumps using both feet together",
+        "Try more advanced moves like alternate feet or double jumps as you improve",
+        "Keep a steady rhythm and pace, focusing on consistent jumping height"
+      ]
+    },
+    "boxing": {
+      "title": "Boxing",
+      "description": "Practice boxing techniques for fitness and coordination",
+      "instructions": [
+        "Stand with feet shoulder-width apart in boxing stance",
+        "Practice punches with proper form",
+        "Remember to protect your face"
+      ]
+    },
+    "stepups": {
+      "title": "Step Ups",
+      "description": "Simple but effective exercise using a step or platform",
+      "instructions": [
+        "Stand in front of a step or sturdy platform",
+        "Step up with one foot, then the other",
+        "Step down in the same controlled manner"
+      ]
+    },
+    "weightlifting": {
+      "title": "Weightlifting",
+      "description": "Build strength using weights with proper form and technique",
+      "instructions": [
+        "Start with lightweight dumbbells appropriate for your level",
+        "Focus on proper form rather than heavy weights",
+        "Perform movements slowly with control"
+      ]
+    },
+    "handstands": {
+      "title": "Handstands",
+      "description": "Challenge yourself with this advanced bodyweight skill",
+      "instructions": [
+        "Start against a wall for support",
+        "Kick up gently with control",
+        "Hold position focusing on alignment"
+      ]
     },
     "start": "Start Recording",
     "stop": "Stop Recording",
