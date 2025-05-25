@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="50" r="20" fill="#FF1493" />
+  <rect x="95" y="70" width="10" height="40" fill="#FF1493" />
+  <line x1="95" y1="80" x2="60" y2="110" stroke="#FF1493" stroke-width="10" />
+  <line x1="105" y1="80" x2="140" y2="110" stroke="#FF1493" stroke-width="10" />
+  <line x1="95" y1="110" x2="80" y2="150" stroke="#FF1493" stroke-width="10" />
+  <line x1="105" y1="110" x2="120" y2="150" stroke="#FF1493" stroke-width="10" />
+  <circle cx="170" cy="50" r="15" fill="#FF1493" opacity="0.5" />
+  <circle cx="170" cy="90" r="15" fill="#FF1493" opacity="0.7" />
+  <circle cx="170" cy="130" r="15" fill="#FF1493" opacity="0.9" />
+  <text x="100" y="180" text-anchor="middle" font-size="14" font-family="Arial" fill="#FF1493">Resistance</text>
+</svg>

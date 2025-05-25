@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="50" r="20" fill="#FF6347" />
+  <rect x="95" y="70" width="10" height="40" fill="#FF6347" />
+  <rect x="70" y="110" width="60" height="10" fill="#FF6347" />
+  <line x1="75" y1="120" x2="75" y2="140" stroke="#FF6347" stroke-width="10" />
+  <line x1="125" y1="120" x2="125" y2="140" stroke="#FF6347" stroke-width="10" />
+  <rect x="60" y="140" width="30" height="10" fill="#FF6347" />
+  <rect x="110" y="140" width="30" height="10" fill="#FF6347" />
+  <text x="100" y="180" text-anchor="middle" font-size="14" font-family="Arial" fill="#FF6347">Plank</text>
+</svg>
