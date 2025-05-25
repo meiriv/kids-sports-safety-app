@@ -1,53 +1,50 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, CircularProgress } from '@mui/material';
 import { useMotion } from '../../context/MotionContext';
-import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
-// Import MediaPipe dependencies
-import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
-import { POSE_CONNECTIONS } from '@mediapipe/pose';
+import { GeminiLiveService, GeminiLiveFeedback } from '../../services/GeminiLiveService';
+import { useParams } from 'react-router-dom';
 
 interface CameraProps {
   width?: number;
   height?: number;
   showOverlay?: boolean;
+  onCameraReady?: (ready: boolean) => void;
 }
 
 const Camera: React.FC<CameraProps> = ({
   width = 640,
   height = 480,
-  showOverlay = true
+  showOverlay = true,
+  onCameraReady
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
+  const [geminiFeedback, setGeminiFeedback] = useState<GeminiLiveFeedback | null>(null);
   
-  const { t } = useTranslation();
   const { isRTL } = useLanguage();
   
   const { 
     setVideoElement, 
-    cameraReady, 
-    isTracking, 
-    poses, 
-    startTracking, 
-    stopTracking,
-    modelLoading
+    isTracking
   } = useMotion();
+
+  const { activityId } = useParams<{ activityId: string }>();
 
   // Initialize camera
   useEffect(() => {
+    setIsInitializing(true);
+    const videoEl = videoRef.current;
+    if (!videoEl) {
+      setCameraError('Video element not found');
+      setIsInitializing(false);
+      if (onCameraReady) onCameraReady(false);
+      return;
+    }
     const initializeCamera = async () => {
-      setIsInitializing(true);
-      
-      if (!videoRef.current) {
-        setCameraError('Video element not found');
-        setIsInitializing(false);
-        return;
-      }
-
       try {
         const constraints = {
           video: {
@@ -56,137 +53,79 @@ const Camera: React.FC<CameraProps> = ({
             facingMode: 'user'
           }
         };
-        
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        videoRef.current.srcObject = stream;
-        
-        // Wait for video to be ready
-        videoRef.current.onloadedmetadata = () => {
-          if (videoRef.current) {
-            videoRef.current.play()
-              .then(() => {
-                setVideoElement(videoRef.current!);
-                setIsInitializing(false);
-              })
-              .catch(err => {
-                console.error('Error playing video:', err);
-                setCameraError('Failed to start video stream');
-                setIsInitializing(false);
-              });
-          }
+        videoEl.srcObject = stream;
+        videoEl.onloadedmetadata = () => {
+          videoEl.play()
+            .then(() => {
+              setVideoElement(videoEl);
+              setIsInitializing(false);
+              if (onCameraReady) onCameraReady(true);
+            })
+            .catch(err => {
+              console.error('Error playing video:', err);
+              setCameraError('Failed to start video stream');
+              setIsInitializing(false);
+              if (onCameraReady) onCameraReady(false);
+            });
         };
       } catch (err) {
         console.error('Error accessing camera:', err);
         setCameraError('Failed to access camera. Please check permissions.');
         setIsInitializing(false);
+        if (onCameraReady) onCameraReady(false);
       }
     };
-
     initializeCamera();
-
     // Clean up function
     return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
+      if (videoEl && videoEl.srcObject) {
+        const stream = videoEl.srcObject as MediaStream;
         const tracks = stream.getTracks();
-        
         tracks.forEach(track => {
           track.stop();
         });
       }
     };
-  }, [width, height, setVideoElement]);
+  }, [width, height, setVideoElement, onCameraReady]);
   
-  // Draw pose keypoints on canvas when poses change
-  useEffect(() => {
-    if (!canvasRef.current || !videoRef.current || !showOverlay || poses.length === 0) return;
-    
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-    
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
-    
-    // Draw keypoints and connections
-    poses.forEach(pose => {
-      // Draw keypoints
-      pose.keypoints.forEach(keypoint => {
-        if (keypoint.score && keypoint.score > 0.3) {
-          ctx.fillStyle = 'rgb(255, 0, 0)';
-          ctx.beginPath();
-          ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
-          ctx.fill();
-          
-          // Optionally draw keypoint names
-          if (keypoint.name) {
-            ctx.fillStyle = 'white';
-            ctx.font = '12px Arial';
-            ctx.fillText(keypoint.name, keypoint.x + 10, keypoint.y);
-          }
-        }
-      });
-      
-      // Draw skeleton (connections between keypoints)
-      drawConnections(ctx, pose);
-    });
-  }, [poses, width, height, showOverlay]);
-  
-  // Function to draw connections between keypoints
-  const drawConnections = (
-    ctx: CanvasRenderingContext2D,
-    pose: any
-  ) => {
-    const connections = [
-      ['nose', 'left_eye'],
-      ['nose', 'right_eye'],
-      ['left_eye', 'left_ear'],
-      ['right_eye', 'right_ear'],
-      ['left_shoulder', 'right_shoulder'],
-      ['left_shoulder', 'left_elbow'],
-      ['right_shoulder', 'right_elbow'],
-      ['left_elbow', 'left_wrist'],
-      ['right_elbow', 'right_wrist'],
-      ['left_shoulder', 'left_hip'],
-      ['right_shoulder', 'right_hip'],
-      ['left_hip', 'right_hip'],
-      ['left_hip', 'left_knee'],
-      ['right_hip', 'right_knee'],
-      ['left_knee', 'left_ankle'],
-      ['right_knee', 'right_ankle']
-    ];
-    
-    ctx.strokeStyle = 'rgb(0, 255, 0)';
-    ctx.lineWidth = 2;
-    
-    connections.forEach(([startPoint, endPoint]) => {
-      const startKeypoint = pose.keypoints.find((kp: any) => kp.name === startPoint);
-      const endKeypoint = pose.keypoints.find((kp: any) => kp.name === endPoint);
-      
-      if (
-        startKeypoint && 
-        endKeypoint && 
-        startKeypoint.score && 
-        endKeypoint.score && 
-        startKeypoint.score > 0.3 && 
-        endKeypoint.score > 0.3
-      ) {
-        ctx.beginPath();
-        ctx.moveTo(startKeypoint.x, startKeypoint.y);
-        ctx.lineTo(endKeypoint.x, endKeypoint.y);
-        ctx.stroke();
-      }
-    });
-  };
-  
-  // Toggle tracking
-  const handleToggleTracking = () => {
-    if (isTracking) {
-      stopTracking();
-    } else {
-      startTracking();
-    }
-  };
+  // --- Gemini WebSocket live streaming integration using MediaRecorder ---
+  const apiKey = '<YOUR_GEMINI_API_KEY>'; // TODO: Replace with your actual API key
 
+  useEffect(() => {
+    let localWs: WebSocket | null = null;
+    let stream: MediaStream | null = null;
+    if (isTracking && activityId && apiKey && videoRef.current && videoRef.current.srcObject) {
+      stream = videoRef.current.srcObject as MediaStream;
+      localWs = GeminiLiveService.createLiveWebSocketFromMediaStream(
+        stream,
+        activityId,
+        apiKey,
+        (feedback) => setGeminiFeedback(feedback),
+        (err) => {/* Optionally handle error */}
+      );
+    }
+    return () => {
+      if (localWs) localWs.close();
+    };
+  }, [isTracking, activityId, apiKey]);
+
+  // Close camera connection on browser refresh or tab close
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const videoEl = videoRef.current;
+      if (videoEl && videoEl.srcObject) {
+        const stream = videoEl.srcObject as MediaStream;
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+  
   return (
     <Box sx={{ position: 'relative', width, height, margin: '0 auto' }}>
       {/* Video element */}
@@ -222,8 +161,31 @@ const Camera: React.FC<CameraProps> = ({
         />
       )}
       
+      {/* Gemini Live feedback label */}
+      {geminiFeedback && (
+        <Box sx={{
+          position: 'absolute',
+          top: 16,
+          right: 16,
+          bgcolor: 'rgba(0,0,0,0.7)',
+          color: 'white',
+          px: 2,
+          py: 1,
+          borderRadius: 2,
+          zIndex: 10,
+          maxWidth: 320
+        }}>
+          <Typography variant="body2" fontWeight="bold">
+            Gemini AI Feedback:
+          </Typography>
+          <Typography variant="body1">
+            {geminiFeedback.feedback}
+          </Typography>
+        </Box>
+      )}
+      
       {/* Activity recording indicator */}
-      {isTracking && !isInitializing && !modelLoading && (
+      {isTracking && !isInitializing && (
         <Box 
           sx={{
             position: 'absolute',
@@ -262,8 +224,8 @@ const Camera: React.FC<CameraProps> = ({
           />
         </Box>
       )}
-        {/* Loading indicator */}
-      {(isInitializing || modelLoading) && (
+      {/* Loading indicator */}
+      {isInitializing && (
         <Box 
           sx={{ 
             position: 'absolute', 
@@ -281,14 +243,13 @@ const Camera: React.FC<CameraProps> = ({
         >
           <CircularProgress color="primary" size={60} />          <Typography variant="h6" color="white" sx={{ mt: 2, fontWeight: 'bold' }} align={isRTL ? 'right' : 'left'}>
             {isRTL 
-              ? (modelLoading ? 'טוען גלאי תנועה...' : 'מגדיר מצלמה...')
-              : (modelLoading ? 'Loading Movement Detector...' : 'Setting up camera...')
+              ? 'מגדיר מצלמה...'
+              : 'Setting up camera...'
             }
           </Typography>
           <Typography variant="body2" color="white" sx={{ mt: 1, opacity: 0.8 }} align={isRTL ? 'right' : 'left'}>
             {isRTL ? 'התכונן לזוז וליהנות!' : 'Get ready to move and have fun!'}
           </Typography>
-          
           {/* Fun loading animation */}
           <Box 
             sx={{ 
@@ -312,7 +273,6 @@ const Camera: React.FC<CameraProps> = ({
               />
             ))}
           </Box>
-          
           <Box
             sx={{
               '@keyframes bounce': {
@@ -362,24 +322,6 @@ const Camera: React.FC<CameraProps> = ({
         </Box>
       )}
       
-      {/* Control button */}
-      {cameraReady && !isInitializing && !modelLoading && !cameraError && (
-        <Button
-          variant="contained"
-          color={isTracking ? "error" : "primary"}
-          sx={{ 
-            position: 'absolute', 
-            bottom: 16, 
-            left: '50%', 
-            transform: 'translateX(-50%)'
-          }}          onClick={handleToggleTracking}
-        >
-          {isRTL 
-            ? (isTracking ? "עצור מעקב" : "התחל מעקב")
-            : (isTracking ? "Stop Tracking" : "Start Tracking")
-          }
-        </Button>
-      )}
     </Box>
   );
 };

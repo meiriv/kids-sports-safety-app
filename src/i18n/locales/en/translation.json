@@ -25,7 +25,10 @@
         "Move around freely in front of the camera",
         "Try different movements to earn points",
         "Have fun and be active!"
-      ]
+      ],
+      "step1": "Move around freely in front of the camera",
+      "step2": "Try different movements to earn points",
+      "step3": "Have fun and be active!"
     },
     "dance": {
       "title": "Dance Party",
@@ -34,7 +37,10 @@
         "Dance to your favorite music",
         "Try to use your whole body",
         "Keep the rhythm and have fun!"
-      ]
+      ],
+      "step1": "Dance to your favorite music",
+      "step2": "Try to use your whole body",
+      "step3": "Keep the rhythm and have fun!"
     },
     "sports": {
       "title": "Sports Practice",
@@ -43,7 +49,10 @@
         "Choose your favorite sport movement",
         "Practice the movement in front of the camera",
         "Get feedback on your form"
-      ]
+      ],
+      "step1": "Choose your favorite sport movement",
+      "step2": "Practice the movement in front of the camera",
+      "step3": "Get feedback on your form"
     },
     "start": "Start Recording",
     "stop": "Stop Recording",

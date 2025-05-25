@@ -6,18 +6,15 @@ import {
   Button,
   Grid,
   Paper,
-  CircularProgress,
   Stepper,
   Step,
   StepLabel,
   StepContent,
   Card,
-  CardMedia,
-  IconButton
+  CardMedia
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import Camera from '../../components/motion-tracking/Camera';
-import PoseAnalyzer from '../../components/exercise/PoseAnalyzer';
 import EmergencyAlert from '../../components/emergency/EmergencyAlert';
 import MotionFeedback from '../../components/motion-tracking/MotionFeedback';
 import { useGamification } from '../../context/GamificationContext';
@@ -45,7 +42,8 @@ const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
     id: 'freestyle',
     name: t('activities.freestyle.title'),
     description: t('activities.freestyle.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,    instructions: [
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,
+    instructions: [
       t('activities.freestyle.step1'),
       t('activities.freestyle.step2'),
       t('activities.freestyle.step3')
@@ -55,7 +53,8 @@ const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
     id: 'dance',
     name: t('activities.dance.title'),
     description: t('activities.dance.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,    instructions: [
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
+    instructions: [
       t('activities.dance.step1'),
       t('activities.dance.step2'),
       t('activities.dance.step3')
@@ -65,7 +64,8 @@ const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
     id: 'sports',
     name: t('activities.sports.title'),
     description: t('activities.sports.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,    instructions: [
+    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,
+    instructions: [
       t('activities.sports.step1'),
       t('activities.sports.step2'),
       t('activities.sports.step3')
@@ -85,6 +85,7 @@ const ActivityPage: React.FC = () => {
   const [timer, setTimer] = useState(0);
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
   
   const { 
     startActivitySession, 
@@ -103,7 +104,7 @@ const ActivityPage: React.FC = () => {
         setActivity(foundActivity);
       }
     }
-  }, [activityId, t, isRTL]);
+  }, [activityId, activityTypes]);
 
   // Handle timer for activity session
   useEffect(() => {
@@ -170,6 +171,23 @@ const ActivityPage: React.FC = () => {
     setActiveStep(prev => Math.max(0, prev - 1));
   };
 
+  // Reset session state when activity changes
+  useEffect(() => {
+    setIsSessionActive(false);
+    setIsCompleted(false);
+    setTimer(0);
+    setActiveStep(0);
+  }, [activityId]);
+
+  // Start tracking automatically when the activity page is loaded or activityId changes, but only after camera is ready
+  useEffect(() => {
+    // Only auto-start if not already started for this activity
+    if (cameraReady && !isSessionActive && !isCompleted) {
+      handleStartActivity();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activityId, cameraReady]);
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
       <Button
@@ -188,7 +206,7 @@ const ActivityPage: React.FC = () => {
         {/* Camera and tracking section */}
         <Grid item xs={12} md={8}>
           <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
-            <Camera width={640} height={480} />
+            <Camera width={640} height={480} onCameraReady={setCameraReady} />
               {/* Activity controls */}
             <Box sx={{ p: 2, display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Box sx={{ display: 'flex', flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center' }}>
