@@ -470,13 +470,12 @@ const HomePage: React.FC = () => {
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {recommendedExercises.map(exercise => (          <Grid item xs={12} sm={6} md={4} key={exercise.id}>
-            <ExerciseCard
-              id={exercise.id}
+            <ExerciseCard              id={exercise.id}
               title={exercise.title}
               difficulty={exercise.difficulty}
               ageRange={exercise.ageRange}
               imageUrl={exercise.imageUrl}
-              onClick={() => navigate(`/exercises/${exercise.id}`)}
+              onClick={() => navigate(`/activities/${exercise.id}`)}
             />
           </Grid>
         ))}
