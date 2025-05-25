@@ -41,12 +41,12 @@ interface Activity {
 }
 
 // We'll use translations for activity types
-const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
-  {
+const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [  {
     id: 'freestyle',
     name: t('activities.freestyle.title'),
     description: t('activities.freestyle.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/freestyle-play.svg`,    instructions: [
+    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
+    instructions: [
       t('activities.freestyle.step1'),
       t('activities.freestyle.step2'),
       t('activities.freestyle.step3')
@@ -56,19 +56,17 @@ const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
     id: 'dance',
     name: t('activities.dance.title'),
     description: t('activities.dance.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: [
       t('activities.dance.step1'),
       t('activities.dance.step2'),
       t('activities.dance.step3')
     ]
-  },
-  {
+  },  {
     id: 'sports',
     name: t('activities.sports.title'),
     description: t('activities.sports.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/sports-practice.svg`,
-    instructions: [
+    imageUrl: 'https://images.unsplash.com/photo-1576858574144-9ae1ebcf5ae5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',    instructions: [
       t('activities.sports.step1'),
       t('activities.sports.step2'),
       t('activities.sports.step3')
@@ -77,82 +75,74 @@ const getActivityTypes = (t: TFunction, isRTL: boolean): Activity[] => [
     id: 'stretching',
     name: t('activities.stretching.title'),
     description: t('activities.stretching.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/stretching.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.stretching.instructions', { returnObjects: true })
-  },
-  {
+  },  {
     id: 'pushups',
     name: t('activities.pushups.title'),
     description: t('activities.pushups.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/push-ups.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.pushups.instructions', { returnObjects: true })
   },
   {
     id: 'jumpingjacks',
     name: t('activities.jumpingjacks.title'),
     description: t('activities.jumpingjacks.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/jumping-jacks.svg`,
-    instructions: t('activities.jumpingjacks.instructions', { returnObjects: true })
+    imageUrl: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',    instructions: t('activities.jumpingjacks.instructions', { returnObjects: true })
   },  {
     id: 'plank',
     name: t('activities.plank.title'),
     description: t('activities.plank.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/plank.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.plank.instructions', { returnObjects: true })
-  },  {
-    id: 'resistance',
+  },  {    id: 'resistance',
     name: t('activities.resistance.title'),
     description: t('activities.resistance.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/resistance.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1607962837359-5e7e89f86776?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.resistance.instructions', { returnObjects: true })
   },
   {
     id: 'squats',
     name: t('activities.squats.title'),
     description: t('activities.squats.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/squats.svg`,
-    instructions: t('activities.squats.instructions', { returnObjects: true })
+    imageUrl: 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',    instructions: t('activities.squats.instructions', { returnObjects: true })
   },  {
     id: 'yoga',
     name: t('activities.yoga.title'),
     description: t('activities.yoga.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/yoga.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.yoga.instructions', { returnObjects: true })
-  },  {
-    id: 'crunches',
+  },  {    id: 'crunches',
     name: t('activities.crunches.title'),
     description: t('activities.crunches.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/crunches.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.crunches.instructions', { returnObjects: true })
   },  {
     id: 'jumprope',
     name: t('activities.jumprope.title'),
     description: t('activities.jumprope.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/jumprope.svg`,
-    instructions: t('activities.jumprope.instructions', { returnObjects: true })
-  },  {
-    id: 'boxing',
+    imageUrl: 'https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',    instructions: t('activities.jumprope.instructions', { returnObjects: true })
+  },  {    id: 'boxing',
     name: t('activities.boxing.title'),
     description: t('activities.boxing.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/boxing.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1517438476312-10d79c077509?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.boxing.instructions', { returnObjects: true })
   },  {
     id: 'stepups',
     name: t('activities.stepups.title'),
     description: t('activities.stepups.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/stepups.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.stepups.instructions', { returnObjects: true })
   },  {
     id: 'weightlifting',
     name: t('activities.weightlifting.title'),
     description: t('activities.weightlifting.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/weightlifting.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.weightlifting.instructions', { returnObjects: true })
-  },  {
-    id: 'handstands',
+  },  {    id: 'handstands',
     name: t('activities.handstands.title'),
     description: t('activities.handstands.description'),
-    imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/handstands.svg`,
+    imageUrl: 'https://images.unsplash.com/photo-1593164842264-854604db2260?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80',
     instructions: t('activities.handstands.instructions', { returnObjects: true })
   }
 ];

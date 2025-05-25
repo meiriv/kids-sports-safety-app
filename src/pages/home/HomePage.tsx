@@ -200,25 +200,22 @@ const HomePage: React.FC = () => {
       duration: isRTL ? '8 דקות' : '8 minutes',
       points: 95
     }
-  ];    const recommendedExercises = [    {
-      id: 'resistance',
+  ];    const recommendedExercises = [    {      id: 'resistance',
       title: isRTL ? t('activities.resistance.title', 'פעילויות גומי') : 'Ring/Rubber Band Activities',
       difficulty: 'beginner',
       ageRange: '5-12',
-      imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/resistance.png`
+      imageUrl: 'https://images.unsplash.com/photo-1607962837359-5e7e89f86776?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
     },    {
       id: 'dance',
       title: isRTL ? t('activities.dance.title', 'ריקוד') : 'Dance',
       difficulty: 'beginner',
       ageRange: '5-12',
-      imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/dance-party.jpeg`
-    },
-    {
-      id: 'weightlifting',
-      title: isRTL ? t('activities.weightlifting.title', 'הרמת משקולות') : 'Weightlifting',
-      difficulty: 'intermediate',
-      ageRange: '8-12',
-      imageUrl: `${process.env.PUBLIC_URL}/assets/exercises/weightlifting.png`
+      imageUrl: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
+    },    {
+      id: 'sports',
+      title: isRTL ? t('activities.sports.title', 'אימון ספורט') : 'Sports Practice',
+      difficulty: 'intermediate',      ageRange: '6-12',
+      imageUrl: 'https://images.unsplash.com/photo-1576858574144-9ae1ebcf5ae5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
     }
   ];
   
