@@ -89,26 +89,27 @@ const Camera: React.FC<CameraProps> = ({
     };
   }, [width, height, setVideoElement, onCameraReady]);
   
-  // --- Gemini WebSocket live streaming integration using MediaRecorder ---
-  const apiKey = '<YOUR_GEMINI_API_KEY>'; // TODO: Replace with your actual API key
-
+  // --- Gemini Live streaming integration using backend API ---
+  // (apiKey is no longer needed for backend API)
   useEffect(() => {
-    let localWs: WebSocket | null = null;
+    let stopStream: (() => void) | null = null;
     let stream: MediaStream | null = null;
-    if (isTracking && activityId && apiKey && videoRef.current && videoRef.current.srcObject) {
+    if (isTracking && activityId && videoRef.current && videoRef.current.srcObject) {
       stream = videoRef.current.srcObject as MediaStream;
-      localWs = GeminiLiveService.createLiveWebSocketFromMediaStream(
+      GeminiLiveService.analyzeStream(
         stream,
-        activityId,
-        apiKey,
-        (feedback) => setGeminiFeedback(feedback),
-        (err) => {/* Optionally handle error */}
-      );
+        (feedback: GeminiLiveFeedback) => setGeminiFeedback(feedback),
+        (err: any) => {/* Optionally handle error */}
+      ).then((recorder: any) => {
+        if (recorder && typeof recorder.stopStream === 'function') {
+          stopStream = recorder.stopStream;
+        }
+      });
     }
     return () => {
-      if (localWs) localWs.close();
+      if (stopStream) stopStream();
     };
-  }, [isTracking, activityId, apiKey]);
+  }, [isTracking, activityId]);
 
   // Close camera connection on browser refresh or tab close
   useEffect(() => {
