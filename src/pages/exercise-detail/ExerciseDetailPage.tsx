@@ -30,16 +30,6 @@ const exercises = (t: TFunction): Exercise[] => [
     maxAge: 12,
     instructions: t('activities.exercises.jumpingJacks.instructions', { returnObjects: true }) as string[],
     imageUrl: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
-    motionKeypoints: [
-      {
-        id: 'arms-up',
-        name: 'arms_extended',
-        expectedPositions: [
-          { x: 0.5, y: 0.2, confidence: 0.9 }
-        ],
-        toleranceRange: 0.2
-      }
-    ],
     voicePrompts: [
       'Jump and raise your arms!',
       'Great job, keep going!',
@@ -54,16 +44,7 @@ const exercises = (t: TFunction): Exercise[] => [
     maxAge: 12,
     instructions: t('activities.exercises.squats.instructions', { returnObjects: true }) as string[],
     imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=300&q=80',
-    motionKeypoints: [
-      {
-        id: 'knee-bend',
-        name: 'knee_bend',
-        expectedPositions: [
-          { x: 0.5, y: 0.6, confidence: 0.9 }
-        ],
-        toleranceRange: 0.2
-      }
-    ],    voicePrompts: t('activities.exercises.squats.voicePrompts', { returnObjects: true }) as string[]
+    voicePrompts: t('activities.exercises.squats.voicePrompts', { returnObjects: true }) as string[]
   }
 ];
 

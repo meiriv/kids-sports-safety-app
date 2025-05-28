@@ -70,22 +70,7 @@ export interface Exercise {
   instructions: string[];
   videoUrl?: string;
   imageUrl?: string;
-  motionKeypoints: MotionKeypoint[];
   voicePrompts: string[];
-}
-
-export interface MotionKeypoint {
-  id: string;
-  name: string;
-  expectedPositions: PosePosition[];
-  toleranceRange: number;
-}
-
-export interface PosePosition {
-  x: number;
-  y: number;
-  z?: number;
-  confidence: number;
 }
 
 export interface Leaderboard {
