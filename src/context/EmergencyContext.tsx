@@ -34,7 +34,7 @@ export const EmergencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const countdownRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
-  const { poses, isTracking } = useMotion();
+  const { isTracking } = useMotion();
   
   // Initialize audio for emergency alerts
   useEffect(() => {
@@ -51,31 +51,6 @@ export const EmergencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
     };
   }, []);
-  
-  // Monitor poses for emergency situations when tracking is active
-  useEffect(() => {
-    if (!isTracking || emergencyMode) return;
-    
-    // Check for no movement or abnormal patterns
-    // This is a simplified check - in a real app, you would implement more sophisticated algorithms
-    const checkForEmergency = () => {
-      // No poses detected for an extended time could indicate an emergency
-      if (poses.length === 0) {
-        // In a real app, you'd check for a longer duration
-        console.log('No poses detected - potential emergency');
-        // triggerEmergency('lostVisual');
-      }
-      
-      // You would also implement other checks here, like detecting falls
-      // or abnormal motion patterns
-    };
-    
-    const emergencyCheckInterval = window.setInterval(checkForEmergency, 5000);
-    
-    return () => {
-      window.clearInterval(emergencyCheckInterval);
-    };
-  }, [isTracking, poses, emergencyMode]);
   
   const triggerEmergency = (type: 'noMovement' | 'lostVisual' | 'abnormalPattern' | 'userInitiated') => {
     if (emergencyMode) return;

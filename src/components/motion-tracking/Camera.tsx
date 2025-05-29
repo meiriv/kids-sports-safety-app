@@ -3,9 +3,6 @@ import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useMotion } from '../../context/MotionContext';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
-// Import MediaPipe dependencies
-import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
-import { POSE_CONNECTIONS } from '@mediapipe/pose';
 
 interface CameraProps {
   width?: number;
@@ -20,6 +17,8 @@ const Camera: React.FC<CameraProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [activityFeedback, setActivityFeedback] = useState<string>('');
+  const feedbackCanvasRef = useRef<HTMLCanvasElement | null>(null);
   
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
@@ -31,7 +30,6 @@ const Camera: React.FC<CameraProps> = ({
     setVideoElement, 
     cameraReady, 
     isTracking, 
-    poses, 
     startTracking, 
     stopTracking,
     modelLoading
@@ -39,15 +37,15 @@ const Camera: React.FC<CameraProps> = ({
 
   // Initialize camera
   useEffect(() => {
+    let isMounted = true;
+    // Only set isInitializing to true on first mount
+    setIsInitializing(prev => prev); // do not set to true again if already initialized
     const initializeCamera = async () => {
-      setIsInitializing(true);
-      
       if (!videoRef.current) {
-        setCameraError('Video element not found');
-        setIsInitializing(false);
+        if (isMounted) setCameraError('Video element not found');
+        if (isMounted) setIsInitializing(false);
         return;
       }
-
       try {
         const constraints = {
           video: {
@@ -56,40 +54,42 @@ const Camera: React.FC<CameraProps> = ({
             facingMode: 'user'
           }
         };
-        
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        if (!isMounted) return;
         videoRef.current.srcObject = stream;
-        
-        // Wait for video to be ready
         videoRef.current.onloadedmetadata = () => {
-          if (videoRef.current) {
-            videoRef.current.play()
-              .then(() => {
-                setVideoElement(videoRef.current!);
-                setIsInitializing(false);
-              })
-              .catch(err => {
-                console.error('Error playing video:', err);
+          if (!videoRef.current) return;
+          videoRef.current.play()
+            .then(() => {
+              if (!isMounted) return;
+              setVideoElement(videoRef.current!);
+              setIsInitializing(false);
+            })
+            .catch(err => {
+              if (!isMounted) return;
+              console.error('Error playing video:', err);
+              if (err && err.name === 'NotReadableError') {
+                setCameraError('Could not start video source. Your camera may be in use by another application, not connected, or blocked by browser privacy settings. Please close other apps that use the camera, check permissions, and try again.');
+              } else {
                 setCameraError('Failed to start video stream');
-                setIsInitializing(false);
-              });
-          }
+              }
+              setIsInitializing(false);
+            });
         };
       } catch (err) {
+        if (!isMounted) return;
         console.error('Error accessing camera:', err);
         setCameraError('Failed to access camera. Please check permissions.');
         setIsInitializing(false);
       }
     };
-
     initializeCamera();
-
     // Clean up function
     return () => {
+      isMounted = false;
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
         const tracks = stream.getTracks();
-        
         tracks.forEach(track => {
           track.stop();
         });
@@ -97,88 +97,81 @@ const Camera: React.FC<CameraProps> = ({
     };
   }, [width, height, setVideoElement]);
   
-  // Draw pose keypoints on canvas when poses change
+  const isAnalyzingRef = useRef(false);
+
+  // Periodically capture frame and send to backend for activity analysis, with 3s delay between calls
   useEffect(() => {
-    if (!canvasRef.current || !videoRef.current || !showOverlay || poses.length === 0) return;
-    
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-    
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
-    
-    // Draw keypoints and connections
-    poses.forEach(pose => {
-      // Draw keypoints
-      pose.keypoints.forEach(keypoint => {
-        if (keypoint.score && keypoint.score > 0.3) {
-          ctx.fillStyle = 'rgb(255, 0, 0)';
-          ctx.beginPath();
-          ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
-          ctx.fill();
-          
-          // Optionally draw keypoint names
-          if (keypoint.name) {
-            ctx.fillStyle = 'white';
-            ctx.font = '12px Arial';
-            ctx.fillText(keypoint.name, keypoint.x + 10, keypoint.y);
+    let isMounted = true;
+    let timeout: NodeJS.Timeout | null = null;
+
+    const runAnalysisLoop = () => {
+      if (!isMounted || !isTracking || !videoRef.current || !cameraReady || isInitializing) return;
+      if (isAnalyzingRef.current) {
+        // If still analyzing, try again in 500ms
+        timeout = setTimeout(runAnalysisLoop, 500);
+        return;
+      }
+      const video = videoRef.current;
+      if (!video || video.readyState < 3 || video.videoWidth === 0 || video.videoHeight === 0) {
+        timeout = setTimeout(runAnalysisLoop, 500);
+        return;
+      }
+      let canvas = feedbackCanvasRef.current;
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        feedbackCanvasRef.current = canvas;
+      }
+      canvas.width = video.videoWidth || width;
+      canvas.height = video.videoHeight || height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        timeout = setTimeout(runAnalysisLoop, 500);
+        return;
+      }
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      const base64Data = dataUrl.replace(/^data:image\/jpeg;base64,/, '');
+
+      const analyzeFrame = async () => {
+        isAnalyzingRef.current = true;
+        try {
+          const response = await fetch('http://localhost:5001/analyze_frame', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image_data: base64Data })
+          });
+          if (!isMounted) return;
+          const data = await response.json();
+          setActivityFeedback(data.analysis_result || '');
+        } catch (err) {
+          if (!isMounted) return;
+          setActivityFeedback('Error analyzing activity');
+        } finally {
+          isAnalyzingRef.current = false;
+          // Wait 3 seconds before next call
+          if (isMounted && isTracking) {
+            timeout = setTimeout(runAnalysisLoop, 1);
           }
         }
-      });
-      
-      // Draw skeleton (connections between keypoints)
-      drawConnections(ctx, pose);
-    });
-  }, [poses, width, height, showOverlay]);
-  
-  // Function to draw connections between keypoints
-  const drawConnections = (
-    ctx: CanvasRenderingContext2D,
-    pose: any
-  ) => {
-    const connections = [
-      ['nose', 'left_eye'],
-      ['nose', 'right_eye'],
-      ['left_eye', 'left_ear'],
-      ['right_eye', 'right_ear'],
-      ['left_shoulder', 'right_shoulder'],
-      ['left_shoulder', 'left_elbow'],
-      ['right_shoulder', 'right_elbow'],
-      ['left_elbow', 'left_wrist'],
-      ['right_elbow', 'right_wrist'],
-      ['left_shoulder', 'left_hip'],
-      ['right_shoulder', 'right_hip'],
-      ['left_hip', 'right_hip'],
-      ['left_hip', 'left_knee'],
-      ['right_hip', 'right_knee'],
-      ['left_knee', 'left_ankle'],
-      ['right_knee', 'right_ankle']
-    ];
-    
-    ctx.strokeStyle = 'rgb(0, 255, 0)';
-    ctx.lineWidth = 2;
-    
-    connections.forEach(([startPoint, endPoint]) => {
-      const startKeypoint = pose.keypoints.find((kp: any) => kp.name === startPoint);
-      const endKeypoint = pose.keypoints.find((kp: any) => kp.name === endPoint);
-      
-      if (
-        startKeypoint && 
-        endKeypoint && 
-        startKeypoint.score && 
-        endKeypoint.score && 
-        startKeypoint.score > 0.3 && 
-        endKeypoint.score > 0.3
-      ) {
-        ctx.beginPath();
-        ctx.moveTo(startKeypoint.x, startKeypoint.y);
-        ctx.lineTo(endKeypoint.x, endKeypoint.y);
-        ctx.stroke();
-      }
-    });
-  };
-  
-  // Toggle tracking
+      };
+      analyzeFrame();
+    };
+
+    if (isTracking && videoRef.current && cameraReady && !isInitializing) {
+      runAnalysisLoop();
+    } else {
+      setActivityFeedback('');
+    }
+    return () => {
+      isMounted = false;
+      if (timeout) clearTimeout(timeout);
+      isAnalyzingRef.current = false; // Reset analyzing flag on cleanup
+    };
+  }, [isTracking, width, height, cameraReady, isInitializing]);
+
+  // Toggle tracking (restored, needed for button)
   const handleToggleTracking = () => {
     if (isTracking) {
       stopTracking();
@@ -187,41 +180,48 @@ const Camera: React.FC<CameraProps> = ({
     }
   };
 
+  // --- COMPONENT RETURN ---
   return (
-    <Box sx={{ position: 'relative', width, height, margin: '0 auto' }}>
+    <Box sx={{
+      position: 'relative',
+      width: '100%',
+      height: `${height}px`,
+      margin: '0 auto',
+      maxWidth: '100%'
+    }}>
       {/* Video element */}
       <video
         ref={videoRef}
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: 'contain',
           borderRadius: '8px',
-          transform: 'scaleX(-1)' // Mirror the video
+          transform: 'scaleX(-1)'
         }}
-        width={width}
-        height={height}
         muted
         playsInline
       />
-        {/* Canvas overlay for drawing pose keypoints */}
-      {showOverlay && (
-        <canvas
-          ref={canvasRef}
-          width={width}
-          height={height}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            transform: 'scaleX(-1)', // Mirror the canvas to match the video
-            pointerEvents: 'none'
-          }}
-        />
+      {/* Feedback label overlay */}
+      {isTracking && activityFeedback && (
+        <Box sx={{
+          position: 'absolute',
+          top: 20,
+          right: 20,
+          bgcolor: 'rgba(0,0,0,0.7)',
+          color: 'white',
+          px: 2,
+          py: 1,
+          borderRadius: 2,
+          zIndex: 10,
+          maxWidth: '60%',
+          fontWeight: 'bold',
+          fontSize: '1.1rem',
+          boxShadow: 3
+        }}>
+          {activityFeedback}
+        </Box>
       )}
-      
       {/* Activity recording indicator */}
       {isTracking && !isInitializing && !modelLoading && (
         <Box 
@@ -248,7 +248,8 @@ const Camera: React.FC<CameraProps> = ({
               mr: 1,
               animation: 'pulsate 1.5s infinite ease-in-out'
             }} 
-          />          <Typography variant="body2" fontWeight="bold">
+          />
+          <Typography variant="body2" fontWeight="bold">
             {isRTL ? 'מקליט' : 'Recording'}
           </Typography>
           <Box
@@ -262,7 +263,41 @@ const Camera: React.FC<CameraProps> = ({
           />
         </Box>
       )}
-        {/* Loading indicator */}
+      {/* Control button */}
+      {cameraReady && !isInitializing && !modelLoading && !cameraError && (
+        <Box
+          sx={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            zIndex: 30,
+            pb: 3 // padding bottom for spacing
+          }}
+        >
+          <Button
+            variant="contained"
+            color={isTracking ? "error" : "primary"}
+            sx={{
+              minWidth: 180,
+              minHeight: 48,
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+              borderRadius: 3,
+              boxShadow: 4
+            }}
+            onClick={handleToggleTracking}
+          >
+            {isRTL 
+              ? (isTracking ? "עצור מעקב" : "התחל מעקב")
+              : (isTracking ? "Stop Tracking" : "Start Tracking")
+            }
+          </Button>
+        </Box>
+      )}
+      {/* Loading indicator */}
       {(isInitializing || modelLoading) && (
         <Box 
           sx={{ 
@@ -276,10 +311,12 @@ const Camera: React.FC<CameraProps> = ({
             alignItems: 'center', 
             justifyContent: 'center',
             backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            borderRadius: '8px'
+            borderRadius: '8px',
+            zIndex: 20
           }}
         >
-          <CircularProgress color="primary" size={60} />          <Typography variant="h6" color="white" sx={{ mt: 2, fontWeight: 'bold' }} align={isRTL ? 'right' : 'left'}>
+          <CircularProgress color="primary" size={60} />
+          <Typography variant="h6" color="white" sx={{ mt: 2, fontWeight: 'bold' }} align={isRTL ? 'right' : 'left'}>
             {isRTL 
               ? (modelLoading ? 'טוען גלאי תנועה...' : 'מגדיר מצלמה...')
               : (modelLoading ? 'Loading Movement Detector...' : 'Setting up camera...')
@@ -288,7 +325,6 @@ const Camera: React.FC<CameraProps> = ({
           <Typography variant="body2" color="white" sx={{ mt: 1, opacity: 0.8 }} align={isRTL ? 'right' : 'left'}>
             {isRTL ? 'התכונן לזוז וליהנות!' : 'Get ready to move and have fun!'}
           </Typography>
-          
           {/* Fun loading animation */}
           <Box 
             sx={{ 
@@ -312,7 +348,6 @@ const Camera: React.FC<CameraProps> = ({
               />
             ))}
           </Box>
-          
           <Box
             sx={{
               '@keyframes bounce': {
@@ -327,7 +362,6 @@ const Camera: React.FC<CameraProps> = ({
           />
         </Box>
       )}
-      
       {/* Error message */}
       {cameraError && (
         <Box 
@@ -345,7 +379,8 @@ const Camera: React.FC<CameraProps> = ({
             borderRadius: '8px',
             padding: 2
           }}
-        >          <Typography variant="h6" color="error" align={isRTL ? 'right' : 'left'}>
+        >
+          <Typography variant="h6" color="error" align={isRTL ? 'right' : 'left'}>
             {isRTL ? 'שגיאת מצלמה' : 'Camera Error'}
           </Typography>
           <Typography variant="body1" color="white" align={isRTL ? 'right' : 'left'} sx={{ mt: 1 }}>
@@ -361,27 +396,8 @@ const Camera: React.FC<CameraProps> = ({
           </Typography>
         </Box>
       )}
-      
-      {/* Control button */}
-      {cameraReady && !isInitializing && !modelLoading && !cameraError && (
-        <Button
-          variant="contained"
-          color={isTracking ? "error" : "primary"}
-          sx={{ 
-            position: 'absolute', 
-            bottom: 16, 
-            left: '50%', 
-            transform: 'translateX(-50%)'
-          }}          onClick={handleToggleTracking}
-        >
-          {isRTL 
-            ? (isTracking ? "עצור מעקב" : "התחל מעקב")
-            : (isTracking ? "Stop Tracking" : "Start Tracking")
-          }
-        </Button>
-      )}
     </Box>
   );
-};
+}
 
 export default Camera;
