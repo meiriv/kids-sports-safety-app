@@ -97,52 +97,77 @@ const Camera: React.FC<CameraProps> = ({
     };
   }, [width, height, setVideoElement]);
   
-  // Periodically capture frame and send to backend for activity analysis
+  const isAnalyzingRef = useRef(false);
+
+  // Periodically capture frame and send to backend for activity analysis, with 3s delay between calls
   useEffect(() => {
     let isMounted = true;
-    let interval: NodeJS.Timeout | null = null;
-    // Only run interval if camera is ready, not initializing, and tracking
-    if (isTracking && videoRef.current && cameraReady && !isInitializing) {
-      interval = setInterval(() => {
-        if (!isMounted) return;
-        const video = videoRef.current;
-        // Only proceed if video is fully ready and has valid dimensions
-        if (!video || video.readyState < 3 || video.videoWidth === 0 || video.videoHeight === 0) return;
-        // Create or use hidden canvas
-        let canvas = feedbackCanvasRef.current;
-        if (!canvas) {
-          canvas = document.createElement('canvas');
-          feedbackCanvasRef.current = canvas;
-        }
-        canvas.width = video.videoWidth || width;
-        canvas.height = video.videoHeight || height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(async (blob) => {
-          if (!blob || !isMounted) return;
-          const formData = new FormData();
-          formData.append('frame', blob, 'frame.jpg');
-          try {
-            const response = await fetch('http://localhost:5001/analyze_frame', {
-              method: 'POST',
-              body: formData,
-            });
-            if (!isMounted) return;
-            const data = await response.json();
-            setActivityFeedback(data.feedback || '');
-          } catch (err) {
-            if (!isMounted) return;
-            setActivityFeedback('Error analyzing activity');
+    let timeout: NodeJS.Timeout | null = null;
+
+    const runAnalysisLoop = () => {
+      if (!isMounted || !isTracking || !videoRef.current || !cameraReady || isInitializing) return;
+      if (isAnalyzingRef.current) {
+        // If still analyzing, try again in 500ms
+        timeout = setTimeout(runAnalysisLoop, 500);
+        return;
+      }
+      const video = videoRef.current;
+      if (!video || video.readyState < 3 || video.videoWidth === 0 || video.videoHeight === 0) {
+        timeout = setTimeout(runAnalysisLoop, 500);
+        return;
+      }
+      let canvas = feedbackCanvasRef.current;
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        feedbackCanvasRef.current = canvas;
+      }
+      canvas.width = video.videoWidth || width;
+      canvas.height = video.videoHeight || height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        timeout = setTimeout(runAnalysisLoop, 500);
+        return;
+      }
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      const base64Data = dataUrl.replace(/^data:image\/jpeg;base64,/, '');
+
+      const analyzeFrame = async () => {
+        isAnalyzingRef.current = true;
+        try {
+          const response = await fetch('http://localhost:5001/analyze_frame', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image_data: base64Data })
+          });
+          if (!isMounted) return;
+          const data = await response.json();
+          setActivityFeedback(data.analysis_result || '');
+        } catch (err) {
+          if (!isMounted) return;
+          setActivityFeedback('Error analyzing activity');
+        } finally {
+          isAnalyzingRef.current = false;
+          // Wait 3 seconds before next call
+          if (isMounted && isTracking) {
+            timeout = setTimeout(runAnalysisLoop, 1);
           }
-        }, 'image/jpeg');
-      }, 1000); // every 1 second
+        }
+      };
+      analyzeFrame();
+    };
+
+    if (isTracking && videoRef.current && cameraReady && !isInitializing) {
+      runAnalysisLoop();
     } else {
       setActivityFeedback('');
     }
     return () => {
       isMounted = false;
-      if (interval) clearInterval(interval);
+      if (timeout) clearTimeout(timeout);
+      isAnalyzingRef.current = false; // Reset analyzing flag on cleanup
     };
   }, [isTracking, width, height, cameraReady, isInitializing]);
 
