@@ -16,6 +16,7 @@ import ExerciseDetailPage from './pages/exercise-detail/ExerciseDetailPage';
 import ActivityPage from './pages/activity/ActivityPage';
 import ActivitySelectionPage from './pages/activity/ActivitySelectionPage';
 import SettingsPage from './pages/settings/SettingsPage';
+import InsightsPage from './pages/insights/InsightsPage';
 import Layout from './components/layout/Layout';
 
 // Theme creation is now handled by LanguageContext to support RTL
@@ -41,6 +42,7 @@ function App() {
                     <Route path="leaderboard" element={<Navigate to="/" />} />
                     <Route path="profile" element={<Navigate to="/" />} />
                     <Route path="settings" element={<SettingsPage />} />
+                    <Route path="insights" element={<InsightsPage />} />
                   </Route>
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>

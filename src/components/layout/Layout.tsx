@@ -25,6 +25,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
@@ -42,6 +43,7 @@ const Layout: React.FC = () => {
     { text: t('navigation.home'), icon: <HomeIcon />, path: '/' },
     { text: t('navigation.activities'), icon: <FitnessCenterIcon />, path: '/activities' },
     { text: t('navigation.leaderboard'), icon: <EmojiEventsIcon />, path: '/leaderboard' },
+    { text: t('navigation.insights'), icon: <BarChartIcon />, path: '/insights' },
     { text: t('navigation.profile'), icon: <PersonIcon />, path: '/profile' },
     { text: t('navigation.settings'), icon: <SettingsIcon />, path: '/settings' },
   ];
